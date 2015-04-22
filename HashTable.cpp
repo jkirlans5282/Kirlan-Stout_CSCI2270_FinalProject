@@ -1,6 +1,5 @@
 #include "HashTable.h"
-#import <iostream>
-#include <string>
+
 using namespace std;
 
 
@@ -17,7 +16,7 @@ void HashTable::insertWord(std::string in_word) //Done
 	//cout<<location<<" : "<<in_word<<endl;
 	Word *currentWord = &(hashTable[location]);
 	Word *previousWord = &(hashTable[location]);
-	
+
 	if(currentWord->next==NULL){
 		//cout<<"here\n";
 		currentWord->next = m;
@@ -25,7 +24,7 @@ void HashTable::insertWord(std::string in_word) //Done
 	else{
 		while(true)
 		{
-			//cout<<"comparing "<<currentWord->word<<" : "<<in_word<<" : "; 
+			//cout<<"comparing "<<currentWord->word<<" : "<<in_word<<" : ";
 			//cout<<in_word.compare(currentWord->word)<<endl;
 			if(in_word.compare(currentWord->word)<0)
 			{

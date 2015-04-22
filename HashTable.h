@@ -1,19 +1,6 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
-#import <iostream>
-#include <string>
-
-struct Word{
-    std::string word;
-    int year;
-    Word *next;
-    Word(){next = NULL; word=""; };
-    Word(std::string in_word)
-    {
-       std:: string word = in_word;
-       next= NULL;
-    }
-};
+#import "WordStruct.h"
 
 class HashTable
 {
