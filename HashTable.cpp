@@ -5,14 +5,15 @@ using namespace std;
 
 
 //x is the string to hash, s is the array size
-int HashTable::hashSum(string x) //Done
+unsigned long HashTable::hashSum(std::string x, int s) //Done
 {
-    int sum = 0;
-    for(int i = 1; i<x.length(); i++){
-        sum += x[i];  //ascii value of ith character in the string
-    }
-    sum = sum % arraySize;
-    return sum;
+    unsigned long hash = 5381;
+    int c;
+
+    while (c = *str++)
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+
+    return hash%s;
 }
 void HashTable::insertMovie(std::string in_title, int in_year) //Done
 {
