@@ -2,6 +2,9 @@
 #define WORDSTRUCT_H
 #import <iostream>
 #include <string>
+struct Edge{
+};
+
 struct Word{
     std::string word;
     Word *next;
