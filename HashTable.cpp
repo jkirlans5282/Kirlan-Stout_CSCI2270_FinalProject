@@ -5,51 +5,45 @@ using namespace std;
 
 
 //x is the string to hash, s is the array size
-unsigned long HashTable::hashSum(std::string x, int s) //Done
+int HashTable::hashSum(std::string str, int s) //Done
 {
-    unsigned long hash = 5381;
-    int c;
-
-    while (c = *str++)
-        hash = ((hash << 5) + hash) ^ c;
-
-    return hash%s;
+	return 0;
 }
-void HashTable::insertMovie(std::string in_title, int in_year) //Done
+void HashTable::insertWord(std::string in_word) //Done
 {
-	Movie *m = new Movie(in_title, in_year);
-	int location = hashSum(in_title);
+	Word *m = new Word(in_word);
+	int location = hashSum(in_word, arraySize);
 
-	//cout<<location<<" : "<<in_title<<endl;
-	Movie *currentMovie = &(hashTable[location]);
-	Movie *previousMovie = &(hashTable[location]);
+	//cout<<location<<" : "<<in_word<<endl;
+	Word *currentWord = &(hashTable[location]);
+	Word *previousWord = &(hashTable[location]);
 	
-	if(currentMovie->next==NULL){
+	if(currentWord->next==NULL){
 		//cout<<"here\n";
-		currentMovie->next = m;
+		currentWord->next = m;
 	}
 	else{
 		while(true)
 		{
-			//cout<<"comparing "<<currentMovie->title<<" : "<<in_title<<" : "; 
-			//cout<<in_title.compare(currentMovie->title)<<endl;
-			if(in_title.compare(currentMovie->title)<0)
+			//cout<<"comparing "<<currentWord->word<<" : "<<in_word<<" : "; 
+			//cout<<in_word.compare(currentWord->word)<<endl;
+			if(in_word.compare(currentWord->word)<0)
 			{
 				//cout<<"<0\n";
-				previousMovie->next = m;
-				m->next = currentMovie;
+				previousWord->next = m;
+				m->next = currentWord;
 				break;
 			}
 			else{
 				//cout<<">0\n";
-				if(currentMovie->next != NULL){
+				if(currentWord->next != NULL){
 					//cout<<"not null\n";
-					previousMovie = currentMovie;
-					currentMovie = currentMovie->next;
+					previousWord = currentWord;
+					currentWord = currentWord->next;
 				}
 				else{
 					//cout<<"null\n";
-					currentMovie->next = m;
+					currentWord->next = m;
 					break;
 				}
 			}
@@ -61,10 +55,10 @@ void HashTable::printInventory() //Done
 	bool empty = true;
 	for(int i = 0; i<10; i++){
 		cout<<"["<<i<<"]"<<" : ";
-		Movie currentMovie = hashTable[i];
-		while(currentMovie.next!=NULL){
-			cout<<"("<<currentMovie.next->title<<", "<<currentMovie.next->year<<") -> ";
-			currentMovie=*(currentMovie.next);
+		Word currentWord = hashTable[i];
+		while(currentWord.next!=NULL){
+			cout<<" ("<<currentWord.next->word<<")->";
+			currentWord=*(currentWord.next);
 			if(empty){empty = false;}
 		}
 		cout<<"\n";
@@ -74,32 +68,32 @@ void HashTable::printInventory() //Done
 }
 HashTable::HashTable(int size) //Done
 {
-	hashTable = new Movie[size];
+	hashTable = new Word[size];
 	arraySize = size;
 }
-Movie* HashTable::findMovie(string searchTitle, bool del) //Done
+Word* HashTable::findWord(string searchTitle, bool del) //Done
 {
-	int index = hashSum(searchTitle);
-	Movie * currentMovie = &(hashTable[index]);
-	Movie * previousMovie = &(hashTable[index]);
+	int index = hashSum(searchTitle, arraySize);
+	Word * currentWord = &(hashTable[index]);
+	Word * previousWord = &(hashTable[index]);
 
 	while(true){
-		if(!currentMovie->title.compare(searchTitle)){
-			if(del){return previousMovie;}
-			else{return currentMovie;}
-		}else if(searchTitle.compare(currentMovie->title)<0||currentMovie->next==NULL){
-			cout<<"Movie Not found"<<endl;
+		if(!currentWord->word.compare(searchTitle)){
+			if(del){return previousWord;}
+			else{return currentWord;}
+		}else if(searchTitle.compare(currentWord->word)<0||currentWord->next==NULL){
+			cout<<"Word Not found"<<endl;
 			return NULL;
 		}else{
-			previousMovie = currentMovie;
-			currentMovie=currentMovie->next;
+			previousWord = currentWord;
+			currentWord=currentWord->next;
 		}
 	}
 }
-void HashTable::deleteMovie(string searchTitle) //done
+void HashTable::deleteWord(string searchTitle) //done
 {
-	Movie * previous = findMovie(searchTitle, true);
-	Movie * temp = previous->next;
+	Word * previous = findWord(searchTitle, true);
+	Word * temp = previous->next;
 	delete previous->next;
 	previous->next = temp->next;
 }

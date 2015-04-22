@@ -3,16 +3,15 @@
 #import <iostream>
 #include <string>
 
-struct Movie{
-    std::string title;
+struct Word{
+    std::string word;
     int year;
-    Movie *next;
-    Movie(){next = NULL; title=""; };
-    Movie(std::string in_title, int in_year)
+    Word *next;
+    Word(){next = NULL; word=""; };
+    Word(std::string in_word)
     {
-        title = in_title;
-        year = in_year;
-        next= NULL;
+       std:: string word = in_word;
+       next= NULL;
     }
 };
 
@@ -21,14 +20,14 @@ class HashTable
     public:
         HashTable(int);
         ~HashTable();
-        void insertMovie(std::string in_title, int in_year);
-        Movie* findMovie(std::string searchTitle, bool del);
-        void deleteMovie(std::string searchTitle);
+        void insertWord(std::string in_word);
+        Word* findWord(std::string searchword, bool del);
+        void deleteWord(std::string searchword);
         void printInventory();
-        int hashSum(std::string);
+        int hashSum(std::string, int);
     protected:
     private:
-        Movie *hashTable;
+        Word *hashTable;
         int arraySize;
 };
 
