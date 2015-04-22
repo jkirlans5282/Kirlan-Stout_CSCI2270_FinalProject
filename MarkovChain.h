@@ -5,5 +5,4 @@
 
 
 
-
 #endif // MARKOVCHAIN_H
