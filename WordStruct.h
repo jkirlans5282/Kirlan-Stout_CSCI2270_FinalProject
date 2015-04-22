@@ -5,11 +5,10 @@
 struct Word{
     std::string word;
     Word *next;
-    Word(){next = NULL; word=""; };
     Word(std::string in_word)
     {
        std:: string word = in_word;
-       next= NULL;
+       next = NULL;
     }
 };
 #endif // WORDSTRUCT_H
