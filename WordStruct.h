@@ -1,8 +1,9 @@
 #ifndef WORDSTRUCT_H
 #define WORDSTRUCT_H
-#import <iostream>
+#include <iostream>
 #include <string>
-#import <vector>
+#include <vector>
+struct Word;
 
 struct Edge{
     Word * next;
@@ -11,8 +12,9 @@ struct Edge{
 
 struct Word{
     std::string word;
-    Word *next;
-    std::vector<Edge> edges;
+    Word *next; //linked list for hashtable
+    std::vector<Edge> edges; //graph
+    Word(){std::cout<<"hey shithead you initialized it without a value";};
     Word(std::string in_word)
     {
        std:: string word = in_word;

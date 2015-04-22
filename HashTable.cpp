@@ -63,7 +63,6 @@ void HashTable::printInventory() //Done
 		cout<<"\n";
 	}
 	if(empty){cout<<"Hash table is empty"<<endl;}
-
 }
 HashTable::HashTable(int size) //Done
 {

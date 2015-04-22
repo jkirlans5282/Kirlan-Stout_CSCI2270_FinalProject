@@ -1,5 +1,5 @@
-#include "markov.h"
+#include "MarkovChain.h"
 
 int main(){
-	return 0;	
+	return 0;
 }

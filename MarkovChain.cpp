@@ -1,2 +1,1 @@
-#import "MarkovChain.h"
-#import "WordStruct.h"
+#include "MarkovChain.h"

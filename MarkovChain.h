@@ -1,9 +1,8 @@
 #ifndef MARKOVCHAIN_H
 #define MARKOVCHAIN_H
-import "HashTable.h"
-import "WordStruct.h"
+#include "HashTable.h"
 
-struct
+
 
 
 

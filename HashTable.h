@@ -1,6 +1,6 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
-#import "WordStruct.h"
+#include "WordStruct.h"
 
 class HashTable
 {
