@@ -13,7 +13,7 @@ private:
 public:
 	MarkovChain(std::string);
 	MarkovChain(std::string filename);
-
+	generateString(int length);
 };
 
 
