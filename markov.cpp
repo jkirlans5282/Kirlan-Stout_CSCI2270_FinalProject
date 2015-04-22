@@ -42,7 +42,6 @@ int main(void)
 void build(Prefix& prefix, istream& in)
 {
     string buf;
-
     while (in >> buf)
         add(prefix, buf);
 }
