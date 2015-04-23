@@ -3,7 +3,7 @@
 #include <time.h>
 #include <sstream>
 
-MarkovChain::MarkovChain(std::string filename)
+MarkovChain::MarkovChain(std::string filename) //Untested, written
 {
     std::ifstream inFile(filename);
     std::string input;
@@ -21,9 +21,10 @@ MarkovChain::MarkovChain(std::string filename)
     }
     std::cout<<"finished reading in file\n";
 }
-
 //checks for edge from (currentWord)->next word
-bool MarkovChain::checkForExistingEdge(Word *current, std::string next){ //checks for matching edge if edge is found increments and returns true if edge not found returns false
+//if edge is found increments and returns true if edge not found returns false
+bool MarkovChain::checkForExistingEdge(Word *current, std::string next) //Untested, written
+{
     bool flag = false;
     for(Edge i:current.edges){
         if(!i->next.word.compare(next)){
@@ -33,15 +34,14 @@ bool MarkovChain::checkForExistingEdge(Word *current, std::string next){ //check
         return flag;
     }
 }
-
 // Keep this just as a accessor method so the user 
 // is never accessing the hash table directly
 void MarkovChain::addWord(std::string name){
     //add word to hash table with name value
     hashTable.insertWord(name);
 }
-
-void MarkovChain::addEdge(std::string next){
+void MarkovChain::addEdge(std::string next) //Untested, written
+{
     if(!checkForExistingEdge(currentWord, next)){
         Word * destination = hashTable.findWord(next, false);
         if(destination == NULL) //if no next word is found
@@ -58,8 +58,7 @@ void MarkovChain::addEdge(std::string next){
         }
     }
 }
-
-std::string MarkovChain::generateString(int length)
+std::string MarkovChain::generateString(int length) //Untested, written
 {
     std::string output;
     current = 0;//some word in table
@@ -72,7 +71,7 @@ std::string MarkovChain::generateString(int length)
         {
             totalWeight += current.edges[i].occurences;
         }
-        random_device generator;
+        random_device generator; //this seems excessive? but whatever.
         uniform_real_distribution<int> distribution (0,totalWeight);
         randint = distribution(generator)
         int j = 0;

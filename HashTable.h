@@ -15,7 +15,7 @@ class HashTable
     protected:
     private:
         Word *hashTable;
-        int arraySize;
+        int arraySize; // is this needed, we have hashtable size in the markov chain as well -Jacob
 };
 
 #endif // HASHTABLE_H

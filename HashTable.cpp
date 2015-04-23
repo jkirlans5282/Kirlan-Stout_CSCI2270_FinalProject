@@ -11,7 +11,7 @@ int HashTable::hashSum(std::string str, int s) //Done
 		hash = ((hash * 33) + str[i]);
 	return hash%arraySize;
 }
-Word * HashTable::insertWord(std::string in_word) //Done
+Word * HashTable::insertWord(std::string in_word) //Done, modified untested
 {
 	Word *m = new Word(in_word);
 	int location = hashSum(in_word, arraySize);
@@ -73,7 +73,8 @@ HashTable::HashTable(int size) //Done
 	hashTable = new Word[size];
 	arraySize = size;
 }
-Word* HashTable::findWord(string searchTitle, bool del) //Done bool flag returns previous word if true current if false
+//bool flag returns previous word if true current if false
+Word* HashTable::findWord(string searchTitle, bool del) //Done 
 {
 	int index = hashSum(searchTitle, arraySize);
 	Word * currentWord = &(hashTable[index]);
