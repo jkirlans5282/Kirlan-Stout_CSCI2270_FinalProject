@@ -1,6 +1,13 @@
 #include "MarkovChain.h"
 
 int main(){
-	return 0;
 	
+    MarkovChain chain("hi");
+    std::cout << "hello" << std::endl;
+    int a;
+    std::cout << a << std::endl;
+    a++;
+    std::cout << a << std::endl;
+    
+    return 0;
 }

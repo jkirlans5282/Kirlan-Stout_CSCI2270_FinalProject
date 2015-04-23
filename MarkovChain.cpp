@@ -2,7 +2,14 @@
 #include <random>
 #include <time.h>
 #include <stdio.h>
+#include <fstream>
 #include <sstream>
+
+bool isNotAlpha(char x)
+{
+    bool b = isalpha(x);
+    return !b;
+}
 
 MarkovChain::MarkovChain(std::string fileName, bool flag=true) //Untested, needs cleaning
 {   if(flag){
@@ -12,7 +19,7 @@ MarkovChain::MarkovChain(std::string fileName, bool flag=true) //Untested, needs
             getline(inFile, input); //read-in one line at a time
             //WARNING THIS LINE MIGHT THROUGH ERRORS LATER
             std::cout<<"Before: " <<input<<std::endl;
-            std::replace_if(input.begin(), input.end(), isNotAlphaNum, ' '); //replace all non alpha with nothing
+            std::replace_if(input.begin(), input.end(), isNotAlpha, ' '); //replace all non alpha with nothing
             std::cout<<"After: "<<input<<std::endl;
             std::istringstream ss(input); //create string stream
             std::string parsedWord;
@@ -41,14 +48,15 @@ bool MarkovChain::checkForExistingEdge(Word *current, std::string nextWord) //Un
             flag = true;
             i.occurences+=1;
         }
-        return flag;
     }
+    return flag;
 }
 // Keep this just as a accessor method
 Word * MarkovChain::addWord(std::string name)
 {
     //add word to hash table with name value
-    hashTable->insertWord(name);
+    Word * w = hashTable->insertWord(name);
+    return w;
 }
 
 void MarkovChain::addEdge(std::string next) //Untested, written
