@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+//Word struct is used by both HashTable and MarkovChain
+
 struct Word;
 
 struct Edge{
@@ -14,7 +16,6 @@ struct Edge{
         occurences = 1;
     }
 };
-
 struct Word{
     std::string word;
     Word *next; //linked list for hashtable

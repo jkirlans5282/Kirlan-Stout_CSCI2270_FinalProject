@@ -34,8 +34,7 @@ bool MarkovChain::checkForExistingEdge(Word *current, std::string next) //Untest
         return flag;
     }
 }
-// Keep this just as a accessor method so the user 
-// is never accessing the hash table directly
+// Keep this just as a accessor method
 void MarkovChain::addWord(std::string name){
     //add word to hash table with name value
     hashTable.insertWord(name);

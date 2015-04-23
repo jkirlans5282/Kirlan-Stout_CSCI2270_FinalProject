@@ -10,7 +10,7 @@ private:
 	void addWord(std::string name);
 	void addEdge(std::string next);
     bool checkForExistingEdge(Word *current, std::string next)
-	HashTable hashTable(10);
+	HashTable hashTable(10); //hashtable constructor
     int hashTableSize=10; // is this variable needed we have it in the hashTable.h too. -Jacob
 public:
     //add options to change hashTableSize? -Izaak
