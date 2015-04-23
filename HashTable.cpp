@@ -51,7 +51,7 @@ Word * HashTable::insertWord(std::string in_word) //Done
 			}
 		}
 	}
-    return m
+    return m // now returns the word for later use
 }
 void HashTable::printInventory() //Done
 {
@@ -73,7 +73,7 @@ HashTable::HashTable(int size) //Done
 	hashTable = new Word[size];
 	arraySize = size;
 }
-Word* HashTable::findWord(string searchTitle, bool del) //Done
+Word* HashTable::findWord(string searchTitle, bool del) //Done bool flag returns previous word if true current if false
 {
 	int index = hashSum(searchTitle, arraySize);
 	Word * currentWord = &(hashTable[index]);

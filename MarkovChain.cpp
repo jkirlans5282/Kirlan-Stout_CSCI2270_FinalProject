@@ -1,12 +1,28 @@
 #include "MarkovChain.h"
 #include <random>
 #include <time.h>
+#include <sstream>
 
 MarkovChain::MarkovChain(std::string filename)
 {
-    
+    std::ifstream inFile(filename);
+    std::string input;
+    while(!inFile.eof()){
+        getline(inFile, input); //read-in one line at a time
+        //WARNING THIS LINE MIGHT THROUGH ERRORS LATER
+        std::cout<<"Before: " <<input<<std::endl;
+        std::replace_if(input.begin(), input.end(), isNotAlpha, ''); //replace all non alpha with nothing
+        std::cout<<"After: "<<input<<std::endl;
+        std::istringstream ss(input); //create string stream
+        std::string parsedWord;
+        while(std::getline(ss, parsedWord, ' ')) {
+            addWord(parsedWord);
+        }
+    }
+    std::cout<<"finished reading in file\n";
 }
 
+//checks for edge from (currentWord)->next word
 bool MarkovChain::checkForExistingEdge(Word *current, std::string next){ //checks for matching edge if edge is found increments and returns true if edge not found returns false
     bool flag = false;
     for(Edge i:current.edges){
@@ -18,20 +34,28 @@ bool MarkovChain::checkForExistingEdge(Word *current, std::string next){ //check
     }
 }
 
-void MarkovChain::addWord(std::string next) //Do we need this? I vote we get rid of it -Izaak
-{
-    hashTable.addWord(next)
+// Keep this just as a accessor method so the user 
+// is never accessing the hash table directly
+void MarkovChain::addWord(std::string name){
+    //add word to hash table with name value
+    hashTable.insertWord(name);
 }
 
 void MarkovChain::addEdge(std::string next){
     if(!checkForExistingEdge(currentWord, next)){
         Word * destination = hashTable.findWord(next, false);
-        if(destination == 0) //if no next word is found
+        if(destination == NULL) //if no next word is found
         {
             destination = hashTable.insertWord(next); //create a new word
         }
-        Edge e = new Edge(destination)  //declare new edge to word
-        current.edges.push_back()//append edge into current word edge vector
+        else{
+            Edge e = new Edge(destination)  //declare new edge to word
+            checkForExistingWord(std::string)
+            //check for existing word
+            //if not, create new word
+            Edge e = new Edge()  //declare new edge to word
+            current.edges.push_back()//append edge into current word edge vector
+        }
     }
 }
 
