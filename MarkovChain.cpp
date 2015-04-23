@@ -39,6 +39,7 @@ void MarkovChain::addWord(std::string name){
     //add word to hash table with name value
     hashTable.insertWord(name);
 }
+
 void MarkovChain::addEdge(std::string next) //Untested, written
 {
     if(!checkForExistingEdge(currentWord, next)){
@@ -47,14 +48,8 @@ void MarkovChain::addEdge(std::string next) //Untested, written
         {
             destination = hashTable.insertWord(next); //create a new word
         }
-        else{
-            Edge e = new Edge(destination)  //declare new edge to word
-            checkForExistingWord(std::string)
-            //check for existing word
-            //if not, create new word
-            Edge e = new Edge()  //declare new edge to word
-            current.edges.push_back()//append edge into current word edge vector
-        }
+        Edge e = new Edge(destination)  //declare new edge to word
+        current.edges.push_back(e)//append edge into current word edge vector
     }
 }
 std::string MarkovChain::generateString(int length) //Untested, written
