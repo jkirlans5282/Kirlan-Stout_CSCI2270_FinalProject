@@ -6,7 +6,7 @@ using namespace std;
 //x is the string to hash, s is the array size
 int HashTable::hashSum(std::string str, int s) //Done
 {
-	int hash = str[0]
+	int hash = str[0];
 	for (int i = 1 ; i < str.length(); i++)
 		hash = ((hash * 33) + str[i]);
 	return hash%arraySize;
@@ -51,7 +51,7 @@ Word * HashTable::insertWord(std::string in_word) //Done, modified untested
 			}
 		}
 	}
-    return m // now returns the word for later use
+    return m; // now returns the word for later use
 }
 void HashTable::printInventory() //Done
 {
