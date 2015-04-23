@@ -14,7 +14,7 @@ private:
 public:
 	MarkovChain(std::string); // build markov from string
 	MarkovChain(std::string filename); //build markov from text file
-
+	generateString(int length);
 };
 
 

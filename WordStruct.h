@@ -8,6 +8,11 @@ struct Word;
 struct Edge{
     Word * next;
     int occurences;
+    Edge(Word * n)
+    {
+        next = n;
+        occurences = 1;
+    }
 };
 
 struct Word{
