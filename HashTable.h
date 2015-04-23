@@ -7,7 +7,7 @@ class HashTable
     public:
         HashTable(int);
         ~HashTable();
-        void insertWord(std::string in_word);
+        Word* insertWord(std::string in_word);
         Word* findWord(std::string searchword, bool del);
         void deleteWord(std::string searchword);
         void printInventory();

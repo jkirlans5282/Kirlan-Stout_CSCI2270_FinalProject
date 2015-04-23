@@ -11,7 +11,7 @@ int HashTable::hashSum(std::string str, int s) //Done
 		hash = ((hash * 33) + str[i]);
 	return hash%arraySize;
 }
-void HashTable::insertWord(std::string in_word) //Done
+Word * HashTable::insertWord(std::string in_word) //Done
 {
 	Word *m = new Word(in_word);
 	int location = hashSum(in_word, arraySize);
@@ -51,6 +51,7 @@ void HashTable::insertWord(std::string in_word) //Done
 			}
 		}
 	}
+    return m
 }
 void HashTable::printInventory() //Done
 {
