@@ -14,7 +14,7 @@ private:
     int hashTableSize=10; // is this variable needed we have it in the hashTable.h too. -Jacob
 public:
     //add options to change hashTableSize? -Izaak
-	MarkovChain(std::string fileName, bool flag); //build markov from text file, true filename, false text (Written untested) -Jacob
+	MarkovChain(std::string fileName, bool flag=true); //build markov from text file, true filename, false text (Written untested) -Jacob
     std::string generateString(int length);
 };
 
