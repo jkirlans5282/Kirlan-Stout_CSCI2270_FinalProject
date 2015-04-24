@@ -11,7 +11,7 @@ bool isNotAlpha(char x)
     return !b;
 }
 
-MarkovChain::MarkovChain(std::string fileName, bool flag=true) //Untested, needs cleaning
+MarkovChain::MarkovChain(std::string fileName, bool flag) //Untested, needs cleaning
 {   if(flag){
         std::ifstream inFile(fileName);
         std::string input;
