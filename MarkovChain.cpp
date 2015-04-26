@@ -13,22 +13,22 @@ bool isNotAlpha(char x)
 }
 
 MarkovChain::MarkovChain(std::string fileName, bool flag) //If flag is true, fileName is a filename. If false, it's just a string.
-{   if(flag){
+{   
+    if(flag){
         std::ifstream inFile(fileName);
         std::string input;
+        std::string parsedWord;
+        Word * w;
         while(!inFile.eof()){
             getline(inFile, input); //read-in one line at a time
-            //WARNING THIS LINE MIGHT THROUGH ERRORS LATER
-            std::cout<<"Before: " <<input<<std::endl;
+            std::cout<<input<<std::endl;
             std::replace_if(input.begin(), input.end(), isNotAlpha, ' '); //replace all non alphabetical words with nothing
-            std::cout<<"After: "<<input<<std::endl;
             std::istringstream ss(input); //create string stream
-            std::string parsedWord;
             while(std::getline(ss, parsedWord, ' ')) {
                 if(parsedWord.compare(" ")){
-                    std::cout<<parsedWord<<"\n";
-                    addWord(parsedWord);
-                    hashTable->printInventory();
+                    w = addWord(parsedWord);
+                    addEdge(parsedWord);
+                    currentWord = w;
                 }
             }
         }
@@ -41,8 +41,8 @@ MarkovChain::MarkovChain(std::string fileName, bool flag) //If flag is true, fil
             currentWord = addWord(parsedWord);
         }
     }
-
 }
+
 //checks for edge from (currentWord)->next word
 //if edge is found increments and returns true if edge not found returns false
 bool MarkovChain::checkForExistingEdge(Word *current, std::string nextWord) //Untested, written
@@ -59,22 +59,30 @@ bool MarkovChain::checkForExistingEdge(Word *current, std::string nextWord) //Un
 // Keep this just as a accessor method
 Word * MarkovChain::addWord(std::string name)
 {
-    //add word to hash table with name value
-    return hashTable->insertWord(name);
+    Word * found = hashTable->findWord(name, false);
+    if(!found)
+    {
+        return hashTable->insertWord(name);
+    }
+    return found;
 }
 
 void MarkovChain::addEdge(std::string next) //Untested, written
 {
-    if(!checkForExistingEdge(currentWord, next)){
-        Word * destination = hashTable->findWord(next, false);
-        if(destination == NULL) //if no next word is found
-        {
-            destination = hashTable->insertWord(next); //create a new word
+    if(!currentWord)
+    {
+        if(!checkForExistingEdge(currentWord, next)){
+            Word * destination = hashTable->findWord(next, false);
+            if(destination == NULL) //if no next word is found
+            {
+                destination = hashTable->insertWord(next); //create a new word
+            }
+            Edge *e = new Edge(destination);  //declare new edge to word
+            currentWord->edges.push_back(*e);//append edge into current word edge vector
         }
-        Edge *e = new Edge(destination);  //declare new edge to word
-        currentWord->edges.push_back(*e);//append edge into current word edge vector
-    }
+    }   
 }
+
 std::string MarkovChain::generateString(int length) //Untested, written
 {
     std::string output;

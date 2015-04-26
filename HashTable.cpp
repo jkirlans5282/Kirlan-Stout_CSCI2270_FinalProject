@@ -9,16 +9,14 @@ int HashTable::hashSum(std::string str, int s) //PRODUCES NEGATIVE NUMBERS
 	int hash = str[0];
 	for (int i = 1 ; i < str.length(); i++)
 		hash = ((hash * 33) + str[i]);
-	cout<<"+++ "<<hash%arraySize<<"\n";
-	return hash%arraySize;
+	return abs(hash%arraySize);
 
 }
 Word * HashTable::insertWord(std::string in_word) //Done, modified untested
 {
 	Word *m = new Word(in_word);
-	std::cout<<m->word<<"\n";
 	int location = hashSum(in_word, arraySize);
-
+	std::cout<<in_word<<":"<<m->word<<":"<<location<<std::endl;
 	//cout<<location<<" : "<<in_word<<endl;
 	Word *currentWord = &(hashTable[location]);
 	Word *previousWord = &(hashTable[location]);
@@ -87,7 +85,6 @@ Word* HashTable::findWord(string searchTitle, bool del) //Done
 			if(del){return previousWord;}
 			else{return currentWord;}
 		}else if(searchTitle.compare(currentWord->word)<0||currentWord->next==NULL){
-			cout<<"Word Not found"<<endl;
 			return NULL;
 		}else{
 			previousWord = currentWord;

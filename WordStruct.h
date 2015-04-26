@@ -20,10 +20,10 @@ struct Word{
     std::string word;
     Word *next; //linked list for hashtable
     std::vector<Edge> edges; //graph
-    Word(){std::cout<<"hey shithead you initialized it without a value"; next=NULL;};
+    Word(){word ="__NULL__"; next=NULL;};
     Word(std::string in_word)
     {
-       std:: string word = in_word;
+       word = in_word;
        next = NULL;
     }
 };
