@@ -9,13 +9,14 @@ int HashTable::hashSum(std::string str, int s)
 	return abs(hash%arraySize);
 }
 
-Word *HashTable::insertWord(std::string in_word) //Untested
+Word *HashTable::insertWord(std::string in_word) //Modified untested
 {
 	Word *m = new Word(in_word);
 	int location = hashSum(in_word, arraySize);
 	//std::cout << in_word << ":" << m->word << ":" << location << std::endl; TEST OUTPUT
 	//std::cout << location << " : " << in_word << std::endl;
-	Word *currentWord = &(hashTable[location]);
+	Word *currentWord = &(hashTable[location]); //Can we just make the hashTable an array of pointers instead of having to dereference the first element?
+	Word *previousWord = &(hashTable[location]);
 
 	if(currentWord->next == NULL)
     {
@@ -25,20 +26,24 @@ Word *HashTable::insertWord(std::string in_word) //Untested
     {
 		while(true)
 		{
-			if(in_word.compare(currentWord->next->word) < 0)
+			if(in_word.compare(currentWord->word) < 0)
 			{
-				m->next = currentWord->next;
-				currentWord->next = m;
+				previousWord->next = m;
+				m->next = currentWord;
 				break;
 			}
 			else{
-				if(currentWord->next->next == NULL)
+				if(currentWord->next != NULL)
                 {
-					currentWord->next->next = m;
+					previousWord = currentWord;
+					currentWord = currentWord->next;
+				}
+				else
+                {
+					currentWord->next = m;
 					break;
 				}
 			}
-			currentWord = currentWord->next;
 		}
 	}
     return m; //Now returns the word for later use
@@ -89,7 +94,7 @@ Word* HashTable::findWord(std::string searchTitle, bool returningPrev) //THIS FU
                 return currentWord->next;
             }
 		}
-		else if(searchTitle.compare(currentWord->word) < 0 || currentWord->next->next == NULL)
+		else if(searchTitle.compare(currentWord->next->word) < 0 || currentWord->next->next == NULL)
         {
 			return NULL;
 		}

@@ -29,12 +29,11 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
             std::istringstream ss(input);
             while(std::getline(ss, parsedWord, ' '))
             {
-                //std::cout << parsedWord << std::endl; TEST OUTPUT
+                std::cout << parsedWord << std::endl;// TEST OUTPUT
                 if(parsedWord.compare(""))
                 {
-                    std::cout<<parsedWord<<'\n';
                     w = addWord(parsedWord);
-                    addEdge(w);
+                    addEdge(w); //THE BAD ALLOC IS HERE.
                     currentWord = w;
                 }
             }
