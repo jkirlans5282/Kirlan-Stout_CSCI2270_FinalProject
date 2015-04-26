@@ -32,9 +32,14 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
                 std::cout << parsedWord << std::endl;// TEST OUTPUT
                 if(parsedWord.compare(""))
                 {
+                    std::cout<<"one"<<std::endl;
                     w = addWord(parsedWord);
+                    currentWord = addWord(parsedWord);
+                    std::cout<<"two"<<std::endl;
                     addEdge(w); //THE BAD ALLOC IS HERE.
+                    std::cout<<"three"<<std::endl;
                     currentWord = w;
+                    std::cout<<"four"<<std::endl;
                 }
             }
         }
@@ -70,7 +75,9 @@ Word * MarkovChain::addWord(std::string name)
 
 void MarkovChain::addEdge(Word * next) //Untested
 {
+    std::cout<<currentWord<<std::endl;
     currentWord->edges.push_back(next);
+    std::cout<<"four"<<std::endl;
     currentWord->edgeSize++;
 }
 
