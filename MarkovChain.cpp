@@ -91,7 +91,13 @@ Word * MarkovChain::nextWord(Word * current)
     std::random_device generator;
     std::uniform_int_distribution<int> randomindex (1,current->edgeSize);
     int inx = randomindex(generator);
-    Word * next = current->edges[inx-1].next;
+    Word * next = new Word;
+    if(current->edges.size() > 0)
+        next = current->edges[inx-1].next;
+    else
+    {
+        next->word = "NULLWORD";
+    }
     return next;
 }
 
@@ -112,10 +118,13 @@ std::string MarkovChain::generateString(int length)
     output.append(" ");
     for(int l = 0; l < length; l++)
     {
-        current.printWord();
-        current = *nextWord(&current);
-        output.append(current.word);
-        output.append(" ");
+        if(current.edges.size() > 0)
+        {
+            current.printWord();
+            current = *nextWord(&current);
+            output.append(current.word);
+            output.append(" ");
+        }
     }
     output.append(".");
     //std::cout << output << std::endl; TEST OUTPUT
