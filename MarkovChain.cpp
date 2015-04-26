@@ -25,7 +25,11 @@ MarkovChain::MarkovChain(std::string fileName, bool flag) //If flag is true, fil
             std::istringstream ss(input); //create string stream
             std::string parsedWord;
             while(std::getline(ss, parsedWord, ' ')) {
-                addWord(parsedWord);
+                if(parsedWord.compare(" ")){
+                    std::cout<<parsedWord<<"\n";
+                    addWord(parsedWord);
+                    hashTable->printInventory();
+                }
             }
         }
         std::cout<<"finished reading in file\n";
@@ -56,8 +60,7 @@ bool MarkovChain::checkForExistingEdge(Word *current, std::string nextWord) //Un
 Word * MarkovChain::addWord(std::string name)
 {
     //add word to hash table with name value
-    Word * w = hashTable->insertWord(name);
-    return w;
+    return hashTable->insertWord(name);
 }
 
 void MarkovChain::addEdge(std::string next) //Untested, written

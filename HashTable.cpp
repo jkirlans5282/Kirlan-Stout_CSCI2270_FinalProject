@@ -4,16 +4,19 @@ using namespace std;
 
 
 //x is the string to hash, s is the array size
-int HashTable::hashSum(std::string str, int s) //Done
+int HashTable::hashSum(std::string str, int s) //PRODUCES NEGATIVE NUMBERS 
 {
 	int hash = str[0];
 	for (int i = 1 ; i < str.length(); i++)
 		hash = ((hash * 33) + str[i]);
+	cout<<"+++ "<<hash%arraySize<<"\n";
 	return hash%arraySize;
+
 }
 Word * HashTable::insertWord(std::string in_word) //Done, modified untested
 {
 	Word *m = new Word(in_word);
+	std::cout<<m->word<<"\n";
 	int location = hashSum(in_word, arraySize);
 
 	//cout<<location<<" : "<<in_word<<endl;
@@ -21,7 +24,6 @@ Word * HashTable::insertWord(std::string in_word) //Done, modified untested
 	Word *previousWord = &(hashTable[location]);
 
 	if(currentWord->next==NULL){
-		//cout<<"here\n";
 		currentWord->next = m;
 	}
 	else{
