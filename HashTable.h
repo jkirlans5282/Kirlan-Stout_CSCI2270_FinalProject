@@ -5,7 +5,7 @@
 class HashTable
 {
 private:
-    int[] linkedListLengths;
+    int *linkedListLength;
     public:
         HashTable(int);
         ~HashTable();
