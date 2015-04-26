@@ -6,7 +6,7 @@ class MarkovChain
 {
 private:
 	Word * currentWord;
-	Word * previousWord; //This is unnessecary, hashtable find word method written to find previous and current w/ flag -Jacob
+	Word * previousWord; //This is unnecessary, hashtable find word method written to find previous and current w/ flag -Jacob
 	Word * addWord(std::string name);
 	void addEdge(std::string next);
     bool checkForExistingEdge(Word *current, std::string next);
