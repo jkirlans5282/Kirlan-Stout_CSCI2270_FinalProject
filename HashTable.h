@@ -4,6 +4,8 @@
 
 class HashTable
 {
+private:
+    int[] linkedListLengths;
     public:
         HashTable(int);
         ~HashTable();
