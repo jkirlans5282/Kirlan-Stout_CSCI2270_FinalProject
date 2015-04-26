@@ -1,6 +1,6 @@
 #ifndef MARKOVCHAIN_H
 #define MARKOVCHAIN_H
-#include "HashTable.cpp"
+#include "HashTable.h"
 
 class MarkovChain
 {
@@ -9,7 +9,7 @@ private:
 	Word *currentWord;
 	//Pointer to previousWord was unnecessary and removed. Nice catch, Jacob. -Alex
 	Word *addWord(std::string name);
-	void addEdge(std::string next);
+	void addEdge(Word * next);
     bool checkForExistingEdge(Word *current, std::string next);
     int hashTableSize=10; // Is this variable needed? We have it in the hashTable.h too. -Jacob
 public:

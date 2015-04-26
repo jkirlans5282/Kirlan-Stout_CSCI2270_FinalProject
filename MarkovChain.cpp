@@ -32,7 +32,7 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
                 if(parsedWord.compare(""))
                 {
                     w = addWord(parsedWord);
-                    addEdge(parsedWord);
+                    addEdge(w);
                     currentWord = w;
                 }
             }
@@ -76,47 +76,42 @@ Word * MarkovChain::addWord(std::string name)
     return found;
 }
 
-void MarkovChain::addEdge(std::string next) //Untested
+void MarkovChain::addEdge(Word * next) //Untested
 {
-    if(!currentWord)
+    bool flag = false;
+    for(int i = 0; i < currentWord->edges.size(); i++)
     {
-        //This previously printed out "yes". Perhaps making our test prints more meaningful might help others debug? -Alex
-        std::cout << "MarkovChain::addEdge - currentWord is false" << std::endl;
-        if(!checkForExistingEdge(currentWord, next)){
-            std::cout << "MarkovChain::addEdge - There is no existing edge" << std::endl; //This printed out "yes!!". See above.
-
-            Word * destination = hashTable->findWord(next, false);
-            Edge *e = new Edge(destination);
-            currentWord->edges.push_back(*e);
-        }
-        else
+        if(currentWord->edges[i].next == next)
         {
-
+            currentWord->edges[i].occurences++;
         }
+    }
+    if(!flag)
+    {
+        Edge * e = new Edge(next);
+        currentWord->edges.push_back(*e);
     }
 }
 
-std::string MarkovChain::generateString(int length) //Untested
+std::string MarkovChain::generateString(int length)
 {
     std::string output;
-    std::random_device generator; //This seems excessive. Is it alright to replace it with a more simple random number generator? -Jacob
+    std::random_device generator;
     std::uniform_int_distribution<int> randomindex (0,hashTableSize-1);
     int inx = randomindex(generator);
-    std::cout << inx << std::endl;
-    Word current = *(hashTable->hashTable[inx].next); //Not actually random- can only be one of the
+    Word current = *(hashTable->hashTable[inx].next); //Not actually random - to be fixed once everything else works.
     output.append(current.word);
     output.append(" ");
-    current.printWord();
     for(int l = 0; l < length; l++)
     {
+        current.printWord();
         int totalWeight = 0;
         std::cout << current.edges.size() << std::endl;
         for(int i = 0; i < current.edges.size(); i++)
         {
             totalWeight += current.edges[i].occurences;
-            std::cout << totalWeight << std::endl;
         }
-        std::random_device generator; //See note on whether we need this or not, above.
+        std::random_device generator;
         std::uniform_int_distribution<int> distribution (0,totalWeight);
         int randint = distribution(generator);
         int j = 0;
@@ -126,6 +121,7 @@ std::string MarkovChain::generateString(int length) //Untested
             if(randint<0)
             {
                 current = *(current.edges[j].next);
+                break;
             }
         }
         output.append(current.word);

@@ -1,5 +1,7 @@
 #include "HashTable.h"
 
+using namespace std;
+
 int HashTable::hashSum(std::string str, int s)
 {
 	int hash = str[0];

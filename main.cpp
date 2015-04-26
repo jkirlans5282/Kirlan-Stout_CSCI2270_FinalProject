@@ -1,4 +1,4 @@
-#include "MarkovChain.cpp"
+#include "MarkovChain.h"
 
 int main()
 {
