@@ -6,7 +6,7 @@ class MarkovChain
 {
 
 private:
-	Word *currentWord;
+	Word *currentWord = 0;
 	//Pointer to previousWord was unnecessary and removed. Nice catch, Jacob. -Alex
 	Word *addWord(std::string name);
 	void addEdge(Word * next);

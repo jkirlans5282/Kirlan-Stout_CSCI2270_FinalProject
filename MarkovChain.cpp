@@ -17,14 +17,16 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
 {
     if(flag)
     {
+        bool firstword = true;
         std::ifstream inFile(textIn); //Variable fileName changed to textIn, as it was not always a filename. -Alex
         std::string input;
         std::string parsedWord;
         Word *w;
+        std::cout << "This is a test statement" << std::endl;
         while(!inFile.eof())
         {
             getline(inFile, input);
-            //std::cout << input << std::endl; TEST OUTPUT
+            std::cout << input << std::endl; //TEST OUTPUT
             std::replace_if(input.begin(), input.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with nothing
             std::istringstream ss(input);
             while(std::getline(ss, parsedWord, ' '))
@@ -34,9 +36,12 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
                 {
                     std::cout<<"one"<<std::endl;
                     w = addWord(parsedWord);
-                    currentWord = addWord(parsedWord);
                     std::cout<<"two"<<std::endl;
-                    addEdge(w); //THE BAD ALLOC IS HERE.
+                    if(!firstword)
+                    {
+                        addEdge(w); //THE BAD ALLOC IS HERE.
+                    }
+                    firstword = false;
                     std::cout<<"three"<<std::endl;
                     currentWord = w;
                     std::cout<<"four"<<std::endl;
@@ -75,7 +80,7 @@ Word * MarkovChain::addWord(std::string name)
 
 void MarkovChain::addEdge(Word * next) //Untested
 {
-    std::cout<<currentWord<<std::endl;
+    std::cout<<"Current Word in addEdge is: "<<currentWord<<std::endl;
     currentWord->edges.push_back(next);
     std::cout<<"four"<<std::endl;
     currentWord->edgeSize++;

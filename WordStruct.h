@@ -35,6 +35,7 @@ struct Word{
     void printWord()
     {
         std::cout << word << std::endl;
+        std::cout << edgeSize <<std::endl;
         for(int i = 0; i < edgeSize; i++)
         {
             std::cout << "Edge " << i << ": " << edges[i].next->word << std::endl;
