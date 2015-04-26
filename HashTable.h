@@ -8,12 +8,14 @@ class HashTable
         HashTable(int);
         ~HashTable();
         Word* insertWord(std::string in_word);
-        Word* findWord(std::string searchword, bool del);
+        Word* findWord(std::string searchword, bool returningPrev);
         void deleteWord(std::string searchword);
         void printInventory();
         int hashSum(std::string, int);
+
+        //Why were these made public? -Alex
         Word *hashTable;
-        int arraySize; // is this needed, we have hashtable size in the markov chain as well -Jacob
+        int arraySize; //Is this needed? We have hashtable size in the Markov chain as well. -Jacob
 };
 
 #endif // HASHTABLE_H
