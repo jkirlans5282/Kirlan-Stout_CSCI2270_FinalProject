@@ -14,7 +14,7 @@ Word *HashTable::insertWord(std::string in_word) //Modified untested
 {
 	Word *m = new Word(in_word);
 	int location = hashSum(in_word, arraySize);
-	std::cout << in_word << ":" << m->word << ":" << location << std::endl;
+	//std::cout << in_word << ":" << m->word << ":" << location << std::endl; TEST OUTPUT
 	//std::cout << location << " : " << in_word << std::endl;
 	Word *currentWord = &(hashTable[location]); //Can we just make the hashTable an array of pointers instead of having to dereference the first element?
 	Word *previousWord = &(hashTable[location]);
@@ -75,7 +75,7 @@ HashTable::HashTable(int size)
 }
 
 /* Bool flag returns PREVIOUS word if true and the CURRENT word if false */
-Word* HashTable::findWord(std::string searchTitle, bool returningPrev)
+Word* HashTable::findWord(std::string searchTitle, bool returningPrev) //THIS FUNCTION IS BROKEN
 {
 	int index = hashSum(searchTitle, arraySize);
 	Word *currentWord = &(hashTable[index]);

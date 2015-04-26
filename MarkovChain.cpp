@@ -24,11 +24,12 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
         while(!inFile.eof())
         {
             getline(inFile, input);
-            std::cout << input << std::endl;
+            //std::cout << input << std::endl; TEST OUTPUT
             std::replace_if(input.begin(), input.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with nothing
             std::istringstream ss(input);
             while(std::getline(ss, parsedWord, ' '))
             {
+                //std::cout << parsedWord << std::endl; TEST OUTPUT
                 if(parsedWord.compare(""))
                 {
                     w = addWord(parsedWord);
@@ -52,23 +53,13 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
     }
 }
 
-/* If edge is found increments and returns true if edge not found returns false */
-//Would anyone mind if I combined this method with addEdge? Currently its name is disassociated with its functionality. -Alex
-bool MarkovChain::checkForExistingEdge(Word *current, std::string nextWord) //Untested
-{
-    bool flag = false;
-    for(Edge i:current->edges){
-        if(!i.next->word.compare(nextWord)){
-            flag = true;
-            i.occurences+=1;
-        }
-    }
-    return flag;
-}
 // Keep this just as a accessor method
 Word * MarkovChain::addWord(std::string name)
 {
+    //std::cout << name << std::endl;TEST OUTPUT
+    //hashTable->printInventory(); TEST OUTPUT
     Word * found = hashTable->findWord(name, false);
+    //std::cout << "test" << std::endl; TEST OUTPUT
     if(!found)
     {
         return hashTable->insertWord(name);
@@ -78,19 +69,17 @@ Word * MarkovChain::addWord(std::string name)
 
 void MarkovChain::addEdge(Word * next) //Untested
 {
-    bool flag = false;
-    for(int i = 0; i < currentWord->edges.size(); i++)
-    {
-        if(currentWord->edges[i].next == next)
-        {
-            currentWord->edges[i].occurences++;
-        }
-    }
-    if(!flag)
-    {
-        Edge * e = new Edge(next);
-        currentWord->edges.push_back(*e);
-    }
+    currentWord->edges.push_back(next);
+    currentWord->edgeSize++;
+}
+
+Word * MarkovChain::nextWord(Word * current)
+{
+    std::random_device generator;
+    std::uniform_int_distribution<int> randomindex (1,current->edgeSize);
+    int inx = randomindex(generator);
+    Word * next = current->edges[inx-1].next;
+    return next;
 }
 
 std::string MarkovChain::generateString(int length)
@@ -105,28 +94,11 @@ std::string MarkovChain::generateString(int length)
     for(int l = 0; l < length; l++)
     {
         current.printWord();
-        int totalWeight = 0;
-        std::cout << current.edges.size() << std::endl;
-        for(int i = 0; i < current.edges.size(); i++)
-        {
-            totalWeight += current.edges[i].occurences;
-        }
-        std::random_device generator;
-        std::uniform_int_distribution<int> distribution (0,totalWeight);
-        int randint = distribution(generator);
-        int j = 0;
-        while(true)
-        {
-            randint -= current.edges[j].occurences;
-            if(randint<0)
-            {
-                current = *(current.edges[j].next);
-                break;
-            }
-        }
+        current = *nextWord(&current);
         output.append(current.word);
         output.append(" ");
     }
     output.append(".");
+    //std::cout << output << std::endl; TEST OUTPUT
     return output;
 }

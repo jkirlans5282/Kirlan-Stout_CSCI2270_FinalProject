@@ -20,10 +20,11 @@ struct Edge{
 struct Word{
     std::string word;
     Word *next; //linked list for hashtable
-    std::vector<Edge> edges; //graph
+    std::vector<Edge> edges = {}; //graph
+    int edgeSize = 0;
     Word()
     {
-        word ="__NULL__";
+        word ="";
         next=NULL;
     }
     Word(std::string in_word)
@@ -34,7 +35,7 @@ struct Word{
     void printWord()
     {
         std::cout << word << std::endl;
-        for(int i = 0; i < edges.size(); i++)
+        for(int i = 0; i < edgeSize; i++)
         {
             std::cout << "Edge " << i << ": " << edges[i].next->word << std::endl;
         }
