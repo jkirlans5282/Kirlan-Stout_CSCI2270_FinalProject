@@ -96,7 +96,7 @@ std::string MarkovChain::generateString(int length)
     std::random_device generator;
     std::uniform_int_distribution<int> randomindex (0,hashTableSize-1);
     int inx = randomindex(generator);
-    Word current = *(hashTable->hashTable[inx].next); //Not actually random - to be fixed once everything else works.
+    Word current = *(hashTable->hashTable[inx].next); //Segfault
     output.append(current.word);
     output.append(" ");
     for(int l = 0; l < length; l++)
