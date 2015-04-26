@@ -11,7 +11,7 @@ bool isNotAlpha(char x)
     return !b;
 }
 
-MarkovChain::MarkovChain(std::string fileName, bool flag) //Untested, needs cleaning
+MarkovChain::MarkovChain(std::string fileName, bool flag) //If flag is true, fileName is a filename. If false, it's just a string.
 {   if(flag){
         std::ifstream inFile(fileName);
         std::string input;
@@ -19,7 +19,7 @@ MarkovChain::MarkovChain(std::string fileName, bool flag) //Untested, needs clea
             getline(inFile, input); //read-in one line at a time
             //WARNING THIS LINE MIGHT THROUGH ERRORS LATER
             std::cout<<"Before: " <<input<<std::endl;
-            std::replace_if(input.begin(), input.end(), isNotAlpha, ' '); //replace all non alpha with nothing
+            std::replace_if(input.begin(), input.end(), isNotAlpha, ' '); //replace all non alphabetical words with nothing
             std::cout<<"After: "<<input<<std::endl;
             std::istringstream ss(input); //create string stream
             std::string parsedWord;
