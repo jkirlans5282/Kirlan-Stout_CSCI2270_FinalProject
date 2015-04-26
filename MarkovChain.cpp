@@ -25,7 +25,7 @@ MarkovChain::MarkovChain(std::string fileName, bool flag) //If flag is true, fil
             std::replace_if(input.begin(), input.end(), isNotAlpha, ' '); //replace all non alphabetical words with nothing
             std::istringstream ss(input); //create string stream
             while(std::getline(ss, parsedWord, ' ')) {
-                if(parsedWord.compare(" ")){
+                if(parsedWord.compare("")){
                     w = addWord(parsedWord);
                     addEdge(parsedWord);
                     currentWord = w;
@@ -80,21 +80,25 @@ void MarkovChain::addEdge(std::string next) //Untested, written
             Edge *e = new Edge(destination);  //declare new edge to word
             currentWord->edges.push_back(*e);//append edge into current word edge vector
         }
-    }   
+    }
 }
 
 std::string MarkovChain::generateString(int length) //Untested, written
 {
     std::string output;
-    Word * current = NULL;//random word in table
-    output.append(current->word);
+    std::random_device generator; //this seems excessive? but whatever.
+    std::uniform_int_distribution<int> randomindex (0,hashTableSize-1);
+    int inx = randomindex(generator);
+    std::cout << inx << std::endl;
+    Word current = *(hashTable->hashTable[inx].next);//random word in table
+    output.append(current.word);
     output.append(" ");
     for(int l = 0; l < length; l++)
     {
         int totalWeight = 0;
-        for(int i = 0; i < current->edges.size(); i++)
+        for(int i = 0; i < current.edges.size(); i++)
         {
-            totalWeight += current->edges[i].occurences;
+            totalWeight += current.edges[i].occurences;
         }
         std::random_device generator; //this seems excessive? but whatever.
         std::uniform_int_distribution<int> distribution (0,totalWeight);
@@ -102,13 +106,13 @@ std::string MarkovChain::generateString(int length) //Untested, written
         int j = 0;
         while(true)
         {
-            randint -= current->edges[j].occurences;
+            randint -= current.edges[j].occurences;
             if(randint<0)
             {
-                current = current->edges[j].next;
+                current = *(current.edges[j].next);
             }
         }
-        output.append(current->word);
+        output.append(current.word);
         output.append(" ");
     }
     output.append(".");

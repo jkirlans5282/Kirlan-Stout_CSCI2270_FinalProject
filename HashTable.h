@@ -12,8 +12,6 @@ class HashTable
         void deleteWord(std::string searchword);
         void printInventory();
         int hashSum(std::string, int);
-    protected:
-    private:
         Word *hashTable;
         int arraySize; // is this needed, we have hashtable size in the markov chain as well -Jacob
 };
