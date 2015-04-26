@@ -32,6 +32,7 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
                 //std::cout << parsedWord << std::endl; TEST OUTPUT
                 if(parsedWord.compare(""))
                 {
+                    std::cout<<parsedWord<<'\n';
                     w = addWord(parsedWord);
                     addEdge(w);
                     currentWord = w;
@@ -64,6 +65,7 @@ Word * MarkovChain::addWord(std::string name)
     {
         return hashTable->insertWord(name);
     }
+
     return found;
 }
 

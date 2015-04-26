@@ -1,6 +1,5 @@
 #include "HashTable.h"
-
-using namespace std;
+#include <stdlib.h>
 
 int HashTable::hashSum(std::string str, int s)
 {
@@ -72,7 +71,10 @@ HashTable::HashTable(int size)
 /* Bool flag returns PREVIOUS word if true and the CURRENT word if false */
 Word* HashTable::findWord(std::string searchTitle, bool returningPrev) //THIS FUNCTION IS BROKEN
 {
-	Word *currentWord = &(hashTable[hashSum(searchTitle, arraySize)]);
+    int location = hashSum(searchTitle, arraySize);
+	Word *currentWord = &(hashTable[location]);
+
+    if(hashTable[location].next == NULL) return NULL;
 
 	while(true)
     {
