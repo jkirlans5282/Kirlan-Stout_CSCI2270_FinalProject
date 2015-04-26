@@ -10,14 +10,13 @@ int HashTable::hashSum(std::string str, int s)
 	return abs(hash%arraySize);
 }
 
-Word *HashTable::insertWord(std::string in_word) //Modified untested
+Word *HashTable::insertWord(std::string in_word) //Untested
 {
 	Word *m = new Word(in_word);
 	int location = hashSum(in_word, arraySize);
 	//std::cout << in_word << ":" << m->word << ":" << location << std::endl; TEST OUTPUT
 	//std::cout << location << " : " << in_word << std::endl;
-	Word *currentWord = &(hashTable[location]); //Can we just make the hashTable an array of pointers instead of having to dereference the first element?
-	Word *previousWord = &(hashTable[location]);
+	Word *currentWord = &(hashTable[location]);
 
 	if(currentWord->next == NULL)
     {
@@ -27,24 +26,20 @@ Word *HashTable::insertWord(std::string in_word) //Modified untested
     {
 		while(true)
 		{
-			if(in_word.compare(currentWord->word) < 0)
+			if(in_word.compare(currentWord->next->word) < 0)
 			{
-				previousWord->next = m;
-				m->next = currentWord;
+				m->next = currentWord->next;
+				currentWord->next = m;
 				break;
 			}
 			else{
-				if(currentWord->next != NULL)
+				if(currentWord->next->next == NULL)
                 {
-					previousWord = currentWord;
-					currentWord = currentWord->next;
-				}
-				else
-                {
-					currentWord->next = m;
+					currentWord->next->next = m;
 					break;
 				}
 			}
+			currentWord = currentWord->next;
 		}
 	}
     return m; //Now returns the word for later use
@@ -77,32 +72,27 @@ HashTable::HashTable(int size)
 /* Bool flag returns PREVIOUS word if true and the CURRENT word if false */
 Word* HashTable::findWord(std::string searchTitle, bool returningPrev) //THIS FUNCTION IS BROKEN
 {
-	int index = hashSum(searchTitle, arraySize);
-	Word *currentWord = &(hashTable[index]);
-	Word *previousWord = &(hashTable[index]);
+	Word *currentWord = &(hashTable[hashSum(searchTitle, arraySize)]);
 
 	while(true)
     {
-		if(!currentWord->word.compare(searchTitle))
+		if(!currentWord->next->word.compare(searchTitle))
 		{
 			if(returningPrev)
 			{
-			    return previousWord;
+			    return currentWord;
             }
 			else
             {
-                return currentWord;
+                return currentWord->next;
             }
 		}
-		else if(searchTitle.compare(currentWord->word) < 0 || currentWord->next == NULL)
+		else if(searchTitle.compare(currentWord->word) < 0 || currentWord->next->next == NULL)
         {
 			return NULL;
 		}
-		else
-        {
-			previousWord = currentWord;
-			currentWord = currentWord->next;
-		}
+
+        currentWord = currentWord->next;
 	}
 }
 
