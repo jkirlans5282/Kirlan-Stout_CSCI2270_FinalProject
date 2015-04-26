@@ -26,5 +26,13 @@ struct Word{
        word = in_word;
        next = NULL;
     }
+    void printWord()
+    {
+        std::cout << word << std::endl;
+        for(int i = 0; i < edges.size(); i++)
+        {
+            std::cout << edges[i].next->word << std::endl;
+        }
+    }
 };
 #endif // WORDSTRUCT_H

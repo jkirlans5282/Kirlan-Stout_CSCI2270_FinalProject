@@ -71,14 +71,16 @@ void MarkovChain::addEdge(std::string next) //Untested, written
 {
     if(!currentWord)
     {
+        std::cout << "yes" << std::endl;
         if(!checkForExistingEdge(currentWord, next)){
+            std::cout << "yes!!" << std::endl;
             Word * destination = hashTable->findWord(next, false);
-            if(destination == NULL) //if no next word is found
-            {
-                destination = hashTable->insertWord(next); //create a new word
-            }
             Edge *e = new Edge(destination);  //declare new edge to word
-            currentWord->edges.push_back(*e);//append edge into current word edge vector
+            currentWord->edges.push_back(*e); //append edge into current word edge vector
+        }
+        else
+        {
+            
         }
     }
 }
@@ -93,12 +95,15 @@ std::string MarkovChain::generateString(int length) //Untested, written
     Word current = *(hashTable->hashTable[inx].next);//random word in table
     output.append(current.word);
     output.append(" ");
+    current.printWord();
     for(int l = 0; l < length; l++)
     {
         int totalWeight = 0;
+        std::cout << current.edges.size() << std::endl;
         for(int i = 0; i < current.edges.size(); i++)
         {
             totalWeight += current.edges[i].occurences;
+            std::cout << totalWeight << std::endl;
         }
         std::random_device generator; //this seems excessive? but whatever.
         std::uniform_int_distribution<int> distribution (0,totalWeight);
