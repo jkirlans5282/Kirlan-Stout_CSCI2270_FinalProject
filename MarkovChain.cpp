@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 bool isNotAlpha(char x)
 {
@@ -85,7 +86,7 @@ std::string MarkovChain::generateString(int length) //Untested, written
             totalWeight += current->edges[i].occurences;
         }
         std::random_device generator; //this seems excessive? but whatever.
-        std::uniform_real_distribution<int> distribution (0,totalWeight);
+        std::uniform_int_distribution<int> distribution (0,totalWeight);
         int randint = distribution(generator);
         int j = 0;
         while(true)
