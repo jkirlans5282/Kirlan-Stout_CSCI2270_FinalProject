@@ -55,7 +55,7 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
 
         std::cout << "Finished reading in file" << std::endl;
     }
-    else //If a string is passed and no file needs to be read.
+    else //THIS IS REALLY OLD AND UNTESTED I DON'T THINK IT WORKS
     {
         std::replace_if(textIn.begin(), textIn.end(), isNotAlpha, ' ');
         std::istringstream ss(textIn);
