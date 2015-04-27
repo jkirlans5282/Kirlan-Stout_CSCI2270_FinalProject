@@ -49,10 +49,10 @@ struct Word{
     void printWord() //Prints the word AND all of it's edges.
     {
         std::cout << word << std::endl;
-        std::cout << edgeSize <<std::endl;
+        std::cout << "Edges: "<< edgeSize <<std::endl;
         for(int i = 0; i < edgeSize; i++)
         {
-            std::cout << "Edge " << i << ": " << edges[i].next->word << std::endl;
+            std::cout << "Edge " << i << ": " << edges[i].next->word << " : " << edges[i].occurrences << std::endl;
         }
     }
 };

@@ -103,12 +103,29 @@ void MarkovChain::addEdge(Word * next) //Untested
 
 Word * MarkovChain::nextWord(Word * current)
 {
+    int totalWeight = 0;
+    for(int i = 0; i < current->edgeSize; i++)
+    {
+        totalWeight++;
+    }
     std::random_device generator;
-    std::uniform_int_distribution<int> randomindex (1,current->edgeSize);
-    int rand = randomindex(generator);
+    std::uniform_int_distribution<int> randomweight (0,totalWeight-1);
+    int random = randomweight(generator);
     Word * next = new Word;
     if(current->edges.size() > 0)
-        next = current->edges[rand-1].next;
+    {
+        int j = 0;
+        while(true)
+        {
+            random -= current->edges[j].occurrences;
+            if(random < 0)
+            {
+                next = current->edges[j].next;
+                break;
+            }
+            j++;
+        }
+    }
     else
     {
         next = randomWord();
@@ -120,15 +137,14 @@ Word * MarkovChain::randomWord()
 {
     std::random_device generator; //This doesn't work on Windows machines.
     std::uniform_int_distribution<int> randomindex (0,hashTableSize-1);
-    int rand = randomindex(generator);
-    while(hashTable->hashTable[rand].next == NULL) //In case it picks a hash with no values assigned to it.
+    int random = randomindex(generator);
+    while(hashTable->hashTable[random].next == NULL) //In case it picks a hash with no values assigned to it.
     {
-        rand = randomindex(generator);
+        random = randomindex(generator);
     }
-    
-    std::uniform_int_distribution<int> randomdistance (0,hashTable->linkedListLength[rand]-1);
+    std::uniform_int_distribution<int> randomdistance (0,hashTable->linkedListLength[random]-1);
     int distance = randomdistance(generator);
-    Word * current = hashTable->hashTable[rand].next;
+    Word * current = hashTable->hashTable[random].next;
     for(int i = 0; i < distance; i++)
     {
         current = current->next;
