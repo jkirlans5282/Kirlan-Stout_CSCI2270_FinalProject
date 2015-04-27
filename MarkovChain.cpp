@@ -111,14 +111,13 @@ Word * MarkovChain::nextWord(Word * current)
         next = current->edges[rand-1].next;
     else
     {
-        next->word = "NULLWORD";
+        next = randomWord();
     }
     return next;
 }
 
-std::string MarkovChain::generateString(int length)
+Word * MarkovChain::randomWord()
 {
-    std::string output;
     std::random_device generator; //This doesn't work on Windows machines.
     std::uniform_int_distribution<int> randomindex (0,hashTableSize-1);
     int rand = randomindex(generator);
@@ -126,23 +125,30 @@ std::string MarkovChain::generateString(int length)
     {
         rand = randomindex(generator);
     }
-
+    
     std::uniform_int_distribution<int> randomdistance (0,hashTable->linkedListLength[rand]-1);
     int distance = randomdistance(generator);
-    Word current = *(hashTable->hashTable[rand].next);
+    Word * current = hashTable->hashTable[rand].next;
     for(int i = 0; i < distance; i++)
     {
-        current = *(current.next);
+        current = current->next;
     }
-    output.append(current.word);
+    return current;
+}
+
+std::string MarkovChain::generateString(int length)
+{
+    std::string output;
+    Word * current = randomWord();
+    output.append(current->word);
     output.append(" ");
     for(int l = 0; l < length; l++)
     {
-        if(current.edges.size() > 0)
+        if(current->edges.size() > 0)
         {
-            current.printWord();
-            current = *nextWord(&current);
-            output.append(current.word);
+            current->printWord();
+            current = nextWord(current);
+            output.append(current->word);
             output.append(" ");
         }
     }
