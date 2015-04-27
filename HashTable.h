@@ -5,6 +5,11 @@
 class HashTable
 {
     public:
+    /*
+     What can be private? remember we might need to access things in MarkovChain that the user shouldn't access.
+     Is there a way to do that via inheritance or something?
+     also, should we rename stuff for consistent naming across casses?
+     */
         int *linkedListLength;
         HashTable(int);
         ~HashTable();
@@ -13,10 +18,8 @@ class HashTable
         void deleteWord(std::string searchword);
         void printInventory();
         int hashSum(std::string, int);
-
-        //Why were these made public? -Alex
         Word *hashTable;
-        int arraySize; //Is this needed? We have hashtable size in the Markov chain as well. -Jacob
+        int arraySize;
 };
 
 #endif // HASHTABLE_H
