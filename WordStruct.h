@@ -32,7 +32,7 @@ struct Word{
     std::string word; //The word we are storing.
     Word *next; //Using to implement the linked list in the hash table.
     std::vector<Edge> edges = {}; //Vector of Edge structs used to implement the directed graph.
-    int edgeSize = 0; //This stores the size of the edge variable for easy access.
+    int edgeSize = 0; //This stores the size of the edges variable for easy access.
 
     Word() //Only used for the empty words that are the head of the hashtable's linked list.
     {

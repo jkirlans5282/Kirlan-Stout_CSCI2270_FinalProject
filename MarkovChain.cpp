@@ -6,38 +6,36 @@
 #include <sstream>
 #include <algorithm>
 
+//Determines if a character is alphabetical
 bool isNotAlpha(char x)
 {
     bool b = isalpha(x);
     return !b;
 }
 
-/* If flag is true, textIn is a file name. If false, it's passed as a string. Flag is default TRUE. */
+/* If flag is true, textIn is a file name. If false, it's passed as a string. Flag is default TRUE - see MarkovChain.h. */
 MarkovChain::MarkovChain(std::string textIn, bool flag)
 {
     if(flag) //If a filename is passed and a file needs to be read.
     {
+        //The first word shouldn't be given an edge to itself, this bool allows it not to.
         bool firstword = true;
         std::ifstream inFile(textIn);
-
         std::string line;
         std::string parsedWord;
 
         Word *w;
         std::cout << "This is a test statement" << std::endl;
+        //Read in file
         while(!inFile.eof())
         {
             getline(inFile, line);
-
-            //std::cout << line << std::endl; //TEST OUTPUT
-
             std::replace_if(line.begin(), line.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with spaces.
             std::istringstream ss(line);
 
             while(std::getline(ss, parsedWord, ' ')) //Parses lines into individual words.
             {
-                //std::cout << parsedWord << std::endl;// TEST OUTPUT
-
+                //If word is not a space (resolved issue with seg fault on double spaces)
                 if(parsedWord.compare(""))
                 {
                     w = addWordToHashtable(parsedWord);
@@ -55,7 +53,7 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
 
         std::cout << "Finished reading in file" << std::endl;
     }
-    else //THIS IS REALLY OLD AND UNTESTED I DON'T THINK IT WORKS
+    else //THIS IS REALLY OLD AND UNTESTED I DON'T THINK IT WORKS. Intended to parse a string instead of a file.
     {
         std::replace_if(textIn.begin(), textIn.end(), isNotAlpha, ' ');
         std::istringstream ss(textIn);
@@ -67,20 +65,27 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
     }
 }
 
+//Adds word to hash table if it isn't already there
 Word * MarkovChain::addWordToHashtable(std::string name)
 {
-    Word * found = hashTable->findWord(name, false);
+    Word * found = hashTable->findWord(name, false); //The boolean flag in findWord returns the current word in the hash table if true, the previous word if false
+    //The above line is determining if name exists in the hash table. If not, it returns null. If so, it returns the word right before name.
 
+    //If name isn't already part of the table, insert it:
     if(!found)
     {
         return hashTable->insertWord(name);
     }
-
+    //If name is part of hash table, return null
     return found;
 }
+
+
 bool MarkovChain::checkForExistingEdge(Word * next){
+    //currentWord is a private variable in class MarkovChain
     if(currentWord->edgeSize>=1){
         for(int i = 0 ; i<currentWord->edgeSize; i++){
+            //if an edge exists, increment its weight by one. If not, return false.
             if(currentWord->edges[i].next->word.compare(next->word)==0){
                 currentWord->edges[i].occurrences+=1;
                 return true;
@@ -95,26 +100,32 @@ bool MarkovChain::checkForExistingEdge(Word * next){
 void MarkovChain::addEdge(Word * next) //Untested
 {
     //std::cout<<"Current Word in addEdge is: "<<currentWord<<std::endl; //TEST OUTPUT
-    if(!checkForExistingEdge(next)){ //edge incremented in check sloppy but simple way to do it
+    if(!checkForExistingEdge(next)){ //The weight of the edge is already incremented in checkForExistingEdge() if said function returns true.
+        //If edge doesn't exist, add it. Also increment the variable used to keep track of the size of the vector of adjacent edges
         currentWord->edges.push_back(next);
         currentWord->edgeSize++;
     }
 }
 
+//Picks the next word in the Markov chain
 Word * MarkovChain::nextWord(Word * current)
 {
-    int totalWeight = 0;
+    int totalWeight = 0; //stores the sum of all the weights of all the edges of Word* current
     for(int i = 0; i < current->edgeSize; i++)
     {
-        totalWeight++;
+        totalWeight+= current->edges[i].occurrences;
     }
     std::random_device generator;
     std::uniform_int_distribution<int> randomweight (0,totalWeight-1);
+    //Generate a random number between 0 and totalWeight-1
     int random = randomweight(generator);
     Word * next = new Word;
     if(current->edges.size() > 0)
     {
         int j = 0;
+        //Iterate through current's edges by subtracting each edge's weight one at a time until random is less than zero.
+        //Whatever edge you're on then, that word becomes the next word.
+        //This allows for the probabilities explained in the README (not yet described at the time this comment was written) to be true.
         while(true)
         {
             random -= current->edges[j].occurrences;
@@ -138,7 +149,7 @@ Word * MarkovChain::randomWord()
     std::random_device generator; //This doesn't work on Windows machines.
     std::uniform_int_distribution<int> randomindex (0,hashTableSize-1);
     int random = randomindex(generator);
-    while(hashTable->hashTable[random].next == NULL) //In case it picks a hash with no values assigned to it.
+    while(hashTable->hashTable[random].next == NULL) //If random (which will be an index in the hash table) is a number with no values assigned to it, re-pick it.
     {
         random = randomindex(generator);
     }
