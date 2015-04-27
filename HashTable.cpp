@@ -4,19 +4,21 @@
 int HashTable::hashSum(std::string str, int s)
 {
 	int hash = str[0];
+
 	for (int i = 1 ; i < str.length(); i++)
 		hash = ((hash * 33) + str[i]);
+
 	return abs(hash%arraySize);
 }
 
-Word *HashTable::insertWord(std::string in_word) //Modified untested
+Word *HashTable::insertWord(std::string in_word)
 {
 	Word *m = new Word(in_word);
+
 	int location = hashSum(in_word, arraySize);
-	linkedListLength[location]++;
-	//std::cout << in_word << ":" << m->word << ":" << location << std::endl; TEST OUTPUT
-	//std::cout << location << " : " << in_word << std::endl;
-	Word *currentWord = &(hashTable[location]); //Can we just make the hashTable an array of pointers instead of having to dereference the first element?
+	linkedListLength[location]++; //Used when choosing the random word to start the chain.
+
+	Word *currentWord = &(hashTable[location]);
 	Word *previousWord = &(hashTable[location]);
 
 	if(currentWord->next == NULL)
@@ -75,13 +77,16 @@ HashTable::HashTable(int size)
 	hashTable = new Word[size];
 	arraySize = size;
 	linkedListLength = new int[size];
+
 	for(int i = 0; i<size; i++){
 		linkedListLength[i]=0;
 	}
 }
 
-/* Bool flag returns PREVIOUS word if true and the CURRENT word if false */
-Word* HashTable::findWord(std::string searchTitle, bool returningPrev) //THIS FUNCTION IS BROKEN
+/*
+    Bool flag returns PREVIOUS word if true and the CURRENT word if false.
+*/
+Word* HashTable::findWord(std::string searchTitle, bool returningPrev)
 {
     int location = hashSum(searchTitle, arraySize);
 	Word *currentWord = &(hashTable[location]);

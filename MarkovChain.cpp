@@ -12,64 +12,65 @@ bool isNotAlpha(char x)
     return !b;
 }
 
-/* If flag is true, textIn is a file name. If false, it's just a string of text. */
+/* If flag is true, textIn is a file name. If false, it's passed as a string. Flag is default TRUE. */
 MarkovChain::MarkovChain(std::string textIn, bool flag)
 {
-    if(flag)
+    if(flag) //If a filename is passed and a file needs to be read.
     {
         bool firstword = true;
-        std::ifstream inFile(textIn); //Variable fileName changed to textIn, as it was not always a filename. -Alex
-        std::string input;
+        std::ifstream inFile(textIn);
+
+        std::string line;
         std::string parsedWord;
+
         Word *w;
         std::cout << "This is a test statement" << std::endl;
         while(!inFile.eof())
         {
-            getline(inFile, input);
-            std::cout << input << std::endl; //TEST OUTPUT
-            std::replace_if(input.begin(), input.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with nothing
-            std::istringstream ss(input);
-            while(std::getline(ss, parsedWord, ' '))
+            getline(inFile, line);
+
+            //std::cout << line << std::endl; //TEST OUTPUT
+
+            std::replace_if(line.begin(), line.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with spaces.
+            std::istringstream ss(line);
+
+            while(std::getline(ss, parsedWord, ' ')) //Parses lines into individual words.
             {
-                std::cout << parsedWord << std::endl;// TEST OUTPUT
+                //std::cout << parsedWord << std::endl;// TEST OUTPUT
+
                 if(parsedWord.compare(""))
                 {
-                    std::cout<<"one"<<std::endl;
-                    w = addWord(parsedWord);
-                    std::cout<<"two"<<std::endl;
+                    w = addWordToHashtable(parsedWord);
+
                     if(!firstword)
                     {
-                        addEdge(w); //THE BAD ALLOC IS HERE.
+                        addEdge(w);
                     }
+
                     firstword = false;
-                    std::cout<<"three"<<std::endl;
                     currentWord = w;
-                    std::cout<<"four"<<std::endl;
                 }
             }
         }
 
         std::cout << "Finished reading in file" << std::endl;
     }
-    else
+    else //If a string is passed and no file needs to be read.
     {
-        std::replace_if(textIn.begin(), textIn.end(), isNotAlpha, ' '); //Replace all non alpha characters with nothing
+        std::replace_if(textIn.begin(), textIn.end(), isNotAlpha, ' ');
         std::istringstream ss(textIn);
         std::string parsedWord;
         while(std::getline(ss, parsedWord, ' '))
         {
-            currentWord = addWord(parsedWord);
+            currentWord = addWordToHashtable(parsedWord);
         }
     }
 }
 
-// Keep this just as a accessor method
-Word * MarkovChain::addWord(std::string name)
+Word * MarkovChain::addWordToHashtable(std::string name)
 {
-    //std::cout << name << std::endl;TEST OUTPUT
-    //hashTable->printInventory(); TEST OUTPUT
     Word * found = hashTable->findWord(name, false);
-    //std::cout << "test" << std::endl; TEST OUTPUT
+
     if(!found)
     {
         return hashTable->insertWord(name);
@@ -80,9 +81,8 @@ Word * MarkovChain::addWord(std::string name)
 
 void MarkovChain::addEdge(Word * next) //Untested
 {
-    std::cout<<"Current Word in addEdge is: "<<currentWord<<std::endl;
+    //std::cout<<"Current Word in addEdge is: "<<currentWord<<std::endl; //TEST OUTPUT
     currentWord->edges.push_back(next);
-    std::cout<<"four"<<std::endl;
     currentWord->edgeSize++;
 }
 
@@ -90,10 +90,10 @@ Word * MarkovChain::nextWord(Word * current)
 {
     std::random_device generator;
     std::uniform_int_distribution<int> randomindex (1,current->edgeSize);
-    int inx = randomindex(generator);
+    int rand = randomindex(generator);
     Word * next = new Word;
     if(current->edges.size() > 0)
-        next = current->edges[inx-1].next;
+        next = current->edges[rand-1].next;
     else
     {
         next->word = "NULLWORD";
@@ -104,18 +104,17 @@ Word * MarkovChain::nextWord(Word * current)
 std::string MarkovChain::generateString(int length)
 {
     std::string output;
-    std::random_device generator;
+    std::random_device generator; //This doesn't work on Windows machines.
     std::uniform_int_distribution<int> randomindex (0,hashTableSize-1);
-    int inx = randomindex(generator);
-    while(hashTable->hashTable[inx].next == NULL)
+    int rand = randomindex(generator);
+    while(hashTable->hashTable[rand].next == NULL) //In case it picks a hash with no values assigned to it.
     {
-        inx = randomindex(generator);
-        std::cout<<"inx is "<<inx<<std::endl;
+        rand = randomindex(generator);
     }
 
-    std::uniform_int_distribution<int> randomdistance (0,hashTable->linkedListLength[inx]-1);
+    std::uniform_int_distribution<int> randomdistance (0,hashTable->linkedListLength[rand]-1);
     int distance = randomdistance(generator);
-    Word current = *(hashTable->hashTable[inx].next);
+    Word current = *(hashTable->hashTable[rand].next);
     for(int i = 0; i < distance; i++)
     {
         current = *(current.next);

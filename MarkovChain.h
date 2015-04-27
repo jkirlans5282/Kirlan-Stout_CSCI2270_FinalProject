@@ -6,9 +6,8 @@ class MarkovChain
 {
 
 private:
-	Word *currentWord = 0;
-	//Pointer to previousWord was unnecessary and removed. Nice catch, Jacob. -Alex
-	Word *addWord(std::string name);
+	Word *currentWord;
+	Word *addWordToHashtable(std::string name);
 	void addEdge(Word * next);
 	bool checkForExistingEdge(Word *current, std::string next);
 	int hashTableSize=10; // Is this variable needed? We have it in the hashTable.h too. -Jacob

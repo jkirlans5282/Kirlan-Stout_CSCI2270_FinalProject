@@ -8,8 +8,8 @@ class HashTable
     /*
      What can be private? remember we might need to access things in MarkovChain that the user shouldn't access.
      Is there a way to do that via inheritance or something?
-     also, should we rename stuff for consistent naming across casses?
-     */
+     also, should we rename stuff for consistent naming across cases?
+    */
         int *linkedListLength;
         HashTable(int);
         ~HashTable();
