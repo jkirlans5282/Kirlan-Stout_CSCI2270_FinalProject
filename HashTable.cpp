@@ -13,6 +13,7 @@ Word *HashTable::insertWord(std::string in_word) //Modified untested
 {
 	Word *m = new Word(in_word);
 	int location = hashSum(in_word, arraySize);
+	linkedListLength[location]++;
 	//std::cout << in_word << ":" << m->word << ":" << location << std::endl; TEST OUTPUT
 	//std::cout << location << " : " << in_word << std::endl;
 	Word *currentWord = &(hashTable[location]); //Can we just make the hashTable an array of pointers instead of having to dereference the first element?

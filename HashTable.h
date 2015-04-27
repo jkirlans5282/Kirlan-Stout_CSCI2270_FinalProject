@@ -4,9 +4,8 @@
 
 class HashTable
 {
-private:
-    int *linkedListLength;
     public:
+        int *linkedListLength;
         HashTable(int);
         ~HashTable();
         Word* insertWord(std::string in_word);

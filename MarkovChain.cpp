@@ -113,7 +113,13 @@ std::string MarkovChain::generateString(int length)
         std::cout<<"inx is "<<inx<<std::endl;
     }
 
+    std::uniform_int_distribution<int> randomdistance (0,hashTable->linkedListLength[inx]-1);
+    int distance = randomdistance(generator);
     Word current = *(hashTable->hashTable[inx].next);
+    for(int i = 0; i < distance; i++)
+    {
+        current = *(current.next);
+    }
     output.append(current.word);
     output.append(" ");
     for(int l = 0; l < length; l++)

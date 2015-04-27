@@ -2,7 +2,7 @@
 
 int main()
 {
-    MarkovChain c("test.txt");
+    MarkovChain c("hemingway_test.txt");
 
     c.hashTable->printInventory();
     std::string output = c.generateString(100);

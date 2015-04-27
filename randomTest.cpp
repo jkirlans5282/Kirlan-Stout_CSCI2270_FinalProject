@@ -8,7 +8,7 @@
 #include <sstream>
 #include <algorithm>
 
-int main() {
+int test() {
 
     srand(time(NULL));
 
@@ -129,4 +129,6 @@ int main() {
     std::cout << "7:" << seven << std::endl;
     std::cout << "8:" << eight << std::endl;
     std::cout << "9:" << nine << std::endl;
+    
+    return 0;
 }
