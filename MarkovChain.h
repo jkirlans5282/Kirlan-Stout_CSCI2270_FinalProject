@@ -4,7 +4,6 @@
 
 class MarkovChain
 {
-
 private:
 	Word *currentWord;
 	Word *addWordToHashtable(std::string name);
@@ -18,6 +17,8 @@ public:
 	MarkovChain(std::string textIn, bool flag = true); //If true, a filename is passed. If false a string of text is passed. (Written untested) -Jacob
     std::string generateString(int length);
     HashTable *hashTable = new HashTable(10);
+    void print();
+    void print(std::string);
 
 };
 

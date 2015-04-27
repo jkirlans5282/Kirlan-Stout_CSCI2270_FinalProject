@@ -9,7 +9,13 @@ int main()
     */
     MarkovChain c("hemingway_test.txt");
 
-    c.hashTable->printInventory();
+    std::string empty;
+    std::cin >> empty;
+
+    c.print()
+    c.print("old")
+
+    std::cin >> empty;
 
     std::string output = c.generateString(100);
     std::cout << output << std::endl;

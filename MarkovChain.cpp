@@ -183,3 +183,16 @@ std::string MarkovChain::generateString(int length)
     //std::cout << output << std::endl; TEST OUTPUT
     return output;
 }
+
+void MarkovChain::print(std::string name)
+{
+	Word * found = hashTable->findWord(name, false);
+	found->printWord();
+}
+
+void MarkovChain::print()
+{
+	hashTable->printInventory();
+}
+
+
