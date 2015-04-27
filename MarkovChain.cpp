@@ -78,12 +78,27 @@ Word * MarkovChain::addWordToHashtable(std::string name)
 
     return found;
 }
-
+bool MarkovChain::checkForExistingEdge(Word * next){
+    if(currentWord->edgeSize>=1){
+        for(int i = 0 ; i<currentWord->edgeSize; i++){
+            if(currentWord->edges[i].next->word.compare(next->word)==0){
+                currentWord->edges[i].occurrences+=1;
+                return true;
+            }
+        }
+        return false;
+    }
+    else{
+        return false;
+    }
+}
 void MarkovChain::addEdge(Word * next) //Untested
 {
     //std::cout<<"Current Word in addEdge is: "<<currentWord<<std::endl; //TEST OUTPUT
-    currentWord->edges.push_back(next);
-    currentWord->edgeSize++;
+    if(!checkForExistingEdge(next)){ //edge incremented in check sloppy but simple way to do it
+        currentWord->edges.push_back(next);
+        currentWord->edgeSize++;
+    }
 }
 
 Word * MarkovChain::nextWord(Word * current)
