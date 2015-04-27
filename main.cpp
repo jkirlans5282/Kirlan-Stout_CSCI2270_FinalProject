@@ -7,13 +7,13 @@ int main()
         MarkovChain c("hemingway_test.txt", true);
         This means that a filename is passed in instead of a string.
     */
-    MarkovChain c("hemingway_test.txt");
-
+    MarkovChain c("this is is is a test it is is old is this is indeed a test. \n hellow this is a new line line is \n a new line yes it is hellow.", false);
+    //MarkovChain c("hemingway_test.txt");
     std::string empty;
     std::cin >> empty;
 
-    c.print()
-    c.print("old")
+    c.print();
+    c.print("old");
 
     std::cin >> empty;
 

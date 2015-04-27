@@ -23,9 +23,7 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
         std::ifstream inFile(textIn);
         std::string line;
         std::string parsedWord;
-
         Word *w;
-        std::cout << "This is a test statement" << std::endl;
         //Read in file
         while(!inFile.eof())
         {
@@ -44,8 +42,10 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
                     {
                         addEdge(w);
                     }
-
-                    firstword = false;
+                    else
+                    {
+                        firstword = false;
+                    }
                     currentWord = w;
                 }
             }
@@ -53,15 +53,50 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
 
         std::cout << "Finished reading in file" << std::endl;
     }
-    else //THIS IS REALLY OLD AND UNTESTED I DON'T THINK IT WORKS. Intended to parse a string instead of a file.
+    else
     {
-        std::replace_if(textIn.begin(), textIn.end(), isNotAlpha, ' ');
-        std::istringstream ss(textIn);
+        //The first word shouldn't be given an edge to itself, this bool allows it not to.
+        bool firstword = true;
+        std::string line;
         std::string parsedWord;
-        while(std::getline(ss, parsedWord, ' '))
+        Word *w;
+        std::istringstream ss1(textIn);
+        int i = 0;
+        //Read in file
+        while(std::getline(ss1, line, '\n'))
         {
-            currentWord = addWordToHashtable(parsedWord);
+            std::cout << "line: " << std::endl;
+            std::cout << line << std::endl;
+            std::replace_if(line.begin(), line.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with spaces.
+            std::istringstream ss2(line);
+            while(std::getline(ss2, parsedWord, ' ')) //Parses lines into individual words.
+            {
+                std::cout << parsedWord << std::endl;
+                //If word is not a space (resolved issue with seg fault on double spaces)
+                if(parsedWord.compare(""))
+                {
+                    w = addWordToHashtable(parsedWord);
+
+                    if(!firstword)
+                    {
+                        addEdge(w);
+                    }
+                    else
+                    {
+                        firstword = false;
+                    }
+                    currentWord = w;
+                }
+            }
+            i++;
+            std::getline(ss1, line);
+            if(i>10)
+            {
+                exit(0);
+            }
         }
+
+        std::cout << "Finished reading in string" << std::endl;
     }
 }
 
@@ -179,7 +214,7 @@ std::string MarkovChain::generateString(int length)
             output.append(" ");
         }
     }
-    output.append(".");
+    output.append("\b" ".");
     //std::cout << output << std::endl; TEST OUTPUT
     return output;
 }
