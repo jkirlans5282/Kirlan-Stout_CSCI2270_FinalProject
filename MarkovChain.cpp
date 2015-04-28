@@ -6,7 +6,12 @@
 #include <sstream>
 #include <algorithm>
 
-//Determines if a character is alphabetical
+/*Determines if a character is alphabetical. Returns true if NOT a letter.
+This is so replace_if can be called in the longest constructor to replace all
+non alphabetical chars w/ spaces when reading in file.
+Pre conditions: none.
+Post conditions: none.
+*/
 bool isNotAlpha(char x)
 {
     if(x == ' ')
@@ -17,12 +22,14 @@ bool isNotAlpha(char x)
     return !b;
 }
 
+/*Constructor #1: verbose false, no Markov Chain initialized. */
 MarkovChain::MarkovChain()
 {
     isVerbose = false;
     hashTable->isVerbose = false;
 }
 
+/*Constructor #2: verbose false, constructs Markov Chain from string*/
 MarkovChain::MarkovChain(std::string textIn)
 {
     isVerbose = false;
@@ -30,6 +37,7 @@ MarkovChain::MarkovChain(std::string textIn)
     add(textIn, false);
 }
 
+/* Constructor #3: verbose false, constructs Markov Chain from string if flag is true and file if flag is false. */
 MarkovChain::MarkovChain(std::string textIn, bool flag)
 {
     isVerbose = false;
@@ -37,7 +45,8 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
     add(textIn, flag);
 }
 
-/* If flag is true, textIn is a file name. If false, it's passed as a string. */
+/* If flag is true, textIn is a file name. If false, it's a string variable.
+   If v is true, verbose mode will be used. */
 MarkovChain::MarkovChain(std::string textIn, bool flag, bool v)
 {
     isVerbose = v;
@@ -45,9 +54,15 @@ MarkovChain::MarkovChain(std::string textIn, bool flag, bool v)
     add(textIn, flag);
 }
 
+/*  Constructs both the graph and the hash table. See the readme for a complete description of how this works.
+    If flag is true, textIn is the name of a string. If false, it's used as a file name.
+    Pre conditions: textIn cannot be "" or, if it's a filename, the name of a nonexistent file. If it is, the code
+    will run, but various strange errors occur.
+    Post conditions: Graph (not a class, so no name) and hash table (hashTable) constructed.
+*/
 void MarkovChain::add(std::string textIn, bool flag)
 {
-    if(!flag) //If a filename is passed and a file needs to be read.
+    if(!flag) //textIn is a filename
     {
         //The first word shouldn't be given an edge to itself, this bool allows it not to.
         bool firstword = true;
@@ -90,7 +105,7 @@ void MarkovChain::add(std::string textIn, bool flag)
             std::cout << "Finished reading in string" << std::endl;
         }
     }
-    else
+    else //textIn is a string
     {
         //The first word shouldn't be given an edge to itself, this bool allows it not to.
         bool firstword = true;
@@ -100,7 +115,7 @@ void MarkovChain::add(std::string textIn, bool flag)
         std::istringstream ss1(textIn);
         int i = 0;
 
-        //Reads in the file line by line, and an inner getline() reads the line in word by word.
+        //Parses the string line by line (artifact of previous code. We know there's a better way to do this.)
         while(std::getline(ss1, line, '\n'))
         {
             if(isVerbose)
@@ -109,7 +124,8 @@ void MarkovChain::add(std::string textIn, bool flag)
             }
             std::replace_if(line.begin(), line.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with spaces.
             std::istringstream ss2(line);
-            while(std::getline(ss2, parsedWord, ' ')) //Parses lines into individual words.
+            //Parses each line word by word
+            while(std::getline(ss2, parsedWord, ' '))
             {
                 //If word is not a space (resolved issue with seg fault on double spaces)
                 if(parsedWord.compare(""))
@@ -120,7 +136,7 @@ void MarkovChain::add(std::string textIn, bool flag)
                     {
                         addEdge(w);
                     }
-                    else
+                    else //change firstWord to false the first time through
                     {
                         firstword = false;
                     }
@@ -136,13 +152,20 @@ void MarkovChain::add(std::string textIn, bool flag)
 }
 
 
-//Adds word to hash table if it isn't already there
+/*  Adds word to hash table if it isn't already there.
+    Pre condition: none
+    Post condition: a Word struct has been created and added to the hashTable and the graph.
+        It has a Word *next pointer to the next word in the linked list within the hash table,
+        and a vector of adjacent vertices that contains pointers to all other words that have
+        ever PRECEDED the current one. If the current word has followed one of the words in its edges
+        more than once, the weight of that edge has been incremented by one.
+*/
 Word * MarkovChain::addWordToHashtable(std::string name)
 {
     Word * found = hashTable->findWord(name, false); //The boolean flag in findWord returns the current word in the hash table if true, the previous word if false
     //The above line is determining if name exists in the hash table. If not, it returns null. If so, it returns the word right before name.
 
-    //If name isn't already part of the table, insert it:
+    //If name isn't already part of the table, then found is the Word struct right before name needs to be inserted, so insert it:
     if(!found)
     {
         return hashTable->insertWord(name);
@@ -151,9 +174,12 @@ Word * MarkovChain::addWordToHashtable(std::string name)
     return found;
 }
 
-
+/*  Checks the graph for an edge between currentWord (which is a private global variable in class MarkovChain) and next.
+    Returns true if edge exists, false if not.
+    Pre conditions: none.
+    Post conditions: none.
+*/
 bool MarkovChain::checkForExistingEdge(Word * next){
-    //currentWord is a private variable in class MarkovChain
     if(currentWord->edgeSize>=1){
         for(int i = 0 ; i<currentWord->edgeSize; i++){
             //if an edge exists, increment its weight by one. If not, return false.
@@ -169,17 +195,24 @@ bool MarkovChain::checkForExistingEdge(Word * next){
     }
 }
 
-void MarkovChain::addEdge(Word * next) //Untested
+/*  Adds an edge if the edge doesn't already exist from current to next.
+    The weight of the edge between currentWord (a private global variable) and next is
+    already incremented in checkForExistingEdge() if checkForExistingEdge() returns true.
+*/
+void MarkovChain::addEdge(Word * next)
 {
-    //std::cout<<"Current Word in addEdge is: "<<currentWord<<std::endl; //TEST OUTPUT
-    if(!checkForExistingEdge(next)){ //The weight of the edge is already incremented in checkForExistingEdge() if said function returns true.
-        //If edge doesn't exist, add it. Also increment the variable used to keep track of the size of the vector of adjacent edges
+    //If edge doesn't exist, add it. Also increment the variable used to keep track of the size of the vector of adjacent edges
+    if(!checkForExistingEdge(next)){
         currentWord->edges.push_back(next);
         currentWord->edgeSize++;
     }
 }
 
-//Picks the next word in the Markov chain
+/*  Picks the next word in the Markov chain by choosing a random number between 0 and the total weights of all current's edges,
+    then iterate through current's edges by subtracting each edge's weight one at a time until random is less than zero.
+    Whatever edge you're on then, that word becomes the next word.
+    This allows for the probabilities explained in the README (not yet described at the time this comment was written) to be true.
+*/
 Word * MarkovChain::nextWord(Word * current)
 {
     int totalWeight = 0; //stores the sum of all the weights of all the edges of Word* current
@@ -195,9 +228,6 @@ Word * MarkovChain::nextWord(Word * current)
     if(current->edges.size() > 0)
     {
         int j = 0;
-        //Iterate through current's edges by subtracting each edge's weight one at a time until random is less than zero.
-        //Whatever edge you're on then, that word becomes the next word.
-        //This allows for the probabilities explained in the README (not yet described at the time this comment was written) to be true.
         while(true)
         {
             random -= current->edges[j].occurrences;
