@@ -6,6 +6,7 @@ class HashTable
 {
     friend class MarkovChain; //This allows MarkovChain objects to access the private functions and variables of a HashTable object.
 private:
+    bool verbose;
     int *linkedListLength;
     HashTable(int);
     ~HashTable();

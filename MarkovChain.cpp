@@ -14,8 +14,10 @@ bool isNotAlpha(char x)
 }
 
 /* If flag is true, textIn is a file name. If false, it's passed as a string. Flag is default TRUE - see MarkovChain.h. */
-MarkovChain::MarkovChain(std::string textIn, bool flag)
+MarkovChain::MarkovChain(std::string textIn, bool flag, bool v)
 {
+    verbose = v;
+    hashTable->verbose = v;
     if(flag) //If a filename is passed and a file needs to be read.
     {
         //The first word shouldn't be given an edge to itself, this bool allows it not to.
@@ -25,19 +27,21 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
         std::string parsedWord;
         Word *w;
         //Read in file
-        while(!inFile.eof())
+        while(getline(inFile, line);)
         {
-            getline(inFile, line);
+            if(verbose)
+            {
+                std::cout << "line: " << std::endl;
+                std::cout << line << std::endl;
+            }
             std::replace_if(line.begin(), line.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with spaces.
             std::istringstream ss(line);
-
             while(std::getline(ss, parsedWord, ' ')) //Parses lines into individual words.
             {
                 //If word is not a space (resolved issue with seg fault on double spaces)
                 if(parsedWord.compare(""))
                 {
                     w = addWordToHashtable(parsedWord);
-
                     if(!firstword)
                     {
                         addEdge(w);
@@ -51,7 +55,10 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
             }
         }
 
-        std::cout << "Finished reading in file" << std::endl;
+        if(verbose)
+        {
+            std::cout << "Finished reading in string" << std::endl;
+        }
     }
     else
     {
@@ -65,8 +72,11 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
         //Read in file
         while(std::getline(ss1, line, '\n'))
         {
-            std::cout << "line: " << std::endl;
-            std::cout << line << std::endl;
+            if(verbose)
+            {
+                std::cout << "line: " << std::endl;
+                std::cout << line << std::endl;
+            }
             std::replace_if(line.begin(), line.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with spaces.
             std::istringstream ss2(line);
             while(std::getline(ss2, parsedWord, ' ')) //Parses lines into individual words.
@@ -88,15 +98,12 @@ MarkovChain::MarkovChain(std::string textIn, bool flag)
                     currentWord = w;
                 }
             }
-            i++;
             std::getline(ss1, line);
-            if(i>10)
-            {
-                exit(0);
-            }
         }
-
-        std::cout << "Finished reading in string" << std::endl;
+        if(verbose)
+        {
+            std::cout << "Finished reading in string" << std::endl;
+        }
     }
 }
 
@@ -184,12 +191,20 @@ Word * MarkovChain::randomWord()
     std::random_device generator; //This doesn't work on Windows machines.
     std::uniform_int_distribution<int> randomindex (0,hashTableSize-1);
     int random = randomindex(generator);
+    if(verbose)
+    {
+        std::cout << "Random index:" << random << std::endl;
+    }
     while(hashTable->hashTable[random].next == NULL) //If random (which will be an index in the hash table) is a number with no values assigned to it, re-pick it.
     {
         random = randomindex(generator);
     }
     std::uniform_int_distribution<int> randomdistance (0,hashTable->linkedListLength[random]-1);
     int distance = randomdistance(generator);
+    if(verbose)
+    {
+        std::cout << "Random distance:" << distance << std::endl;
+    }
     Word * current = hashTable->hashTable[random].next;
     for(int i = 0; i < distance; i++)
     {
@@ -208,14 +223,20 @@ std::string MarkovChain::generateString(int length)
     {
         if(current->edges.size() > 0)
         {
-            current->printWord();
+            if(verbose)
+            {
+                current->printWord();
+            }
             current = nextWord(current);
             output.append(current->word);
             output.append(" ");
         }
     }
     output.append("\b" ".");
-    //std::cout << output << std::endl; TEST OUTPUT
+    if(verbose)
+    {
+        std::cout << output << std::endl;
+    }
     return output;
 }
 

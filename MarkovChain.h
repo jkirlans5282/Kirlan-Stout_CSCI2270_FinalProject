@@ -14,7 +14,8 @@ private:
     Word * randomWord();
 public:
     //Add options to change hashTableSize? -Izaak
-	MarkovChain(std::string textIn, bool flag = true); //If true, a filename is passed. If false a string of text is passed. (Written untested) -Jacob
+    bool verbose;
+	MarkovChain(std::string textIn, bool flag = true, bool v = false); //If true, a filename is passed. If false a string of text is passed. (Written untested) -Jacob
     std::string generateString(int length);
     HashTable *hashTable = new HashTable(10);
     void print();

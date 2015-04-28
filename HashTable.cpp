@@ -49,8 +49,11 @@ Word *HashTable::insertWord(std::string in_word)
 			}
 		}
 	}
-    std::cout<<"Printing m in insertWord"<<std::endl;
-    std::cout<<m->word<<std::endl;
+	if(verbose)
+    {
+        std::cout<<"Word added: " << m->word << std::endl;
+    }
+    
     return m; //Now returns the word for later use
 }
 
