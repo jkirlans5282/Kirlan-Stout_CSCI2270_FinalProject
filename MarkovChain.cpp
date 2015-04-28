@@ -179,7 +179,10 @@ void MarkovChain::addEdge(Word * next) //Untested
     }
 }
 
-//Picks the next word in the Markov chain
+/*
+    Picks a new word based off the probability that it would follow the current word.
+
+*/
 Word * MarkovChain::nextWord(Word * current)
 {
     int totalWeight = 0; //stores the sum of all the weights of all the edges of Word* current
@@ -216,13 +219,25 @@ Word * MarkovChain::nextWord(Word * current)
     return next;
 }
 
+/*
+    Chooses a word randomly from the pool of everything that it has read in. It sets current* to be this word.
+    If verbose is true (see below) it prints the index where the word was chosen from.
+
+    Preconditions:
+    Some text has been added to the hashtable.
+    At the moment, this function doesn't appear to work on at least some Windows machines. The random numbers are not, in fact, random.
+
+    Postconditions:
+    Current* changes to some word that is likely to follow it.
+*/
 Word * MarkovChain::randomWord()
 {
-    std::random_device generator; //This doesn't work on Windows machines.
+    std::random_device generator;
     std::uniform_int_distribution<int> randomindex (0,hashTableSize-1);
     int random = randomindex(generator);
 
-    while(hashTable->hashTable[random].next == NULL) //If random (which will be an index in the hash table) is a number with no values assigned to it, re-pick it.
+    //If random (which will be an index in the hash table) is a number with no values assigned to it, re-pick it.
+    while(hashTable->hashTable[random].next == NULL)
     {
         random = randomindex(generator);
     }
@@ -232,6 +247,7 @@ Word * MarkovChain::randomWord()
         std::cout << "Random index:" << random << std::endl;
     }
 
+    //Distance is the distance along the linked list that the random word is found.
     std::uniform_int_distribution<int> randomdistance (0,hashTable->linkedListLength[random]-1);
     int distance = randomdistance(generator);
 
@@ -248,6 +264,15 @@ Word * MarkovChain::randomWord()
     return current;
 }
 
+/*
+    GenerateString() makes a string of words, the length of which is passed in as an argument. This is printed to the console.
+    It does this by selecting a random word from everything that it has read in.
+    Every subsequent word is based off the probability that it would follow the previous word.
+
+    Preconditions:
+    Some text has been added to the Markov chain.
+    Length is greater than zero.
+*/
 std::string MarkovChain::generateString(int length)
 {
     std::string output;
@@ -276,6 +301,12 @@ std::string MarkovChain::generateString(int length)
     return output;
 }
 
+/*
+    GenerateNextWord() prints one word based off the last one that was printed.
+
+    Preconditions:
+    At least one chain should have been generated before this. This fact may change in later patches.
+*/
 std::string MarkovChain::generateNextWord()
 {
     currentWord = nextWord(currentWord);
@@ -283,26 +314,57 @@ std::string MarkovChain::generateNextWord()
     return output;
 }
 
+/*
+    Print() when called with a string shows each edge from the chosen word to all words that can follow it, including weights.
+
+    Preconditions:
+    The word should exist, or it won't be printed.
+*/
 void MarkovChain::print(std::string name)
 {
 	Word * found = hashTable->findWord(name, false);
-	if(found != NULL) found->printWord();
+	if(found != NULL)
+    {
+        found->printWord();
+	}
+	else
+    {
+        std::cout<<"Word not found!"<<std::endl;
+    }
+
 
 }
 
+/*
+    Print() with no arguments will display the hashtable in a visual format, even if it's empty.
+    This is hard to read for large hashtables.
+*/
 void MarkovChain::print()
 {
 	hashTable->printInventory();
 }
 
-void MarkovChain::verbose(bool set)
-{
-    isVerbose = set;
-    hashTable->isVerbose = set;
-}
+/*
+    The verbose feature is useful for debugging, as it prints out much of what goes on behind the scenes.
+    This includes lines when reading in, and edges when generating a string.
 
+    Postconditions:
+    The verbose() method flips whatever verbose is at the moment. If it's true it becomes false and vice versa.
+*/
 void MarkovChain::verbose()
 {
     isVerbose = !isVerbose;
     hashTable->isVerbose = !(hashTable->isVerbose);
+}
+
+/*
+    The verbose method can be called with a boolean argument, which sets verbose to be that regardless of what it was before.
+
+    Postconditions:
+    The verbose boolean is set equal to the boolean passed as an argument
+*/
+void MarkovChain::verbose(bool set)
+{
+    isVerbose = set;
+    hashTable->isVerbose = set;
 }

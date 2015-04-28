@@ -7,7 +7,6 @@
 /*
  This document specifies the basic structs we used to create a directed graph.
  */
-
 struct Word; /* This is defined here so that Edge can point to a word. */
 
 
@@ -15,7 +14,7 @@ struct Edge
 {
     Word * next;
     int occurrences;
-    Edge(Word * n) //constructor
+    Edge(Word * n)
     {
         next = n;
         occurrences = 1;

@@ -16,10 +16,12 @@ private:
 	bool checkForExistingEdge(Word *next);
     Word * randomWord();
 public:
-    //For MarkovChain constructors, if v is true, verbose mode is true. See main.cpp for more information on verbose mode.
-    //If flag is false, a filename is passed that needs to be read. If it's true, a string is passed.
-    //The variables set here are OPTIONAL, so v or flag do not have to be passed and will just be set to false by default.
-    //EX: MarkovChain() and MarkovChain("filename.txt") are VALID constructors.
+    /*
+        For MarkovChain constructors, if v is true, verbose mode is true. See main.cpp for more information on verbose mode.
+        In the constructors, if flag is false it assumes the argument is a filename that needs to be read. If it's true, it assumes it's just a string.
+        If no flag is passed, it assumes the string is a filename. If no verbose flag is passed, it is set to false by default.
+        In the add() method, flag acts the same way but is default false, meaning that add("filename") is valid syntax and won't throw an error.
+    */
 	MarkovChain();
 	MarkovChain(std::string textIn);
 	MarkovChain(std::string textIn, bool flag);
