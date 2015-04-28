@@ -7,7 +7,7 @@ int main()
     
     MarkovChain example2("one one two one two three one two three four one two three four five", true); //This constructor constructs a markov chain directly from the string that is passed in, not from a file.
     
-    MarkovChain example3(); //A markov chain can also be created with no arguments; this can't generate anything, it's just an empty chain.
+    MarkovChain example3; //A markov chain can also be created with no arguments; this can't generate anything, it's just an empty chain.
     
     //These four have all have been initialized in non-verbose mode. In order to set the markov chain into verbose mode, you can either construct it as verbose during construction; turning the above three ito the following examples.
     //Objects in verbose mode will print out /a lot/ of information to the command line
@@ -49,13 +49,13 @@ int main()
     
     //or
 
-    example1.add("hello isn't this a fine addition to this example?", true)
+    example1.add("hello isn't this a fine addition to this example?", true);
     
     //And to print information from the objects, you can use:
     
-    example1.print() //This prints the hashtable used to store all the words
+    example1.print(); //This prints the hashtable used to store all the words
     
-    example1.primt("old") //This prints the information pertaining to the word "old" in the hashtable
+    example1.print("old"); //This prints the information pertaining to the word "old" in the hashtable
     
     
     return 0;

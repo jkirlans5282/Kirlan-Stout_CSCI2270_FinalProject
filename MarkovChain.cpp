@@ -360,3 +360,9 @@ void MarkovChain::verbose(bool set)
     isVerbose = set;
     hashTable->isVerbose = set;
 }
+
+void MarkovChain::verbose()
+{
+    isVerbose = !isVerbose;
+    hashTable->isVerbose = !(hashTable->isVerbose);
+}

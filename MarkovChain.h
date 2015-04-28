@@ -24,6 +24,7 @@ public:
     void print();
     void print(std::string);
     void verbose(bool set);
+    void verbose();
     void add(std::string textIn, bool flag = false);
 };
 
