@@ -294,6 +294,7 @@ Word * MarkovChain::randomWord()
     while(hashTable->hashTable[random].next == NULL) //If random (which will be an index in the hash table) is a number with no values assigned to it, re-pick it.
     {
         random = randomindex(generator);
+        std::cout << "Random index:" << random << std::endl;
     }
     std::uniform_int_distribution<int> randomdistance (0,hashTable->linkedListLength[random]-1);
     int distance = randomdistance(generator);
@@ -311,6 +312,33 @@ Word * MarkovChain::randomWord()
 
 std::string MarkovChain::generateString(int length)
 {
+    bool empty = true;
+    for(int i = 0; i < hashTable->hashTableSize; i++)
+    {
+        std::cout << "[" << i << "]" << " : ";
+        Word currentWord = hashTable->hashTable[i];
+        while(currentWord.next != NULL)
+        {
+            std::cout << " (" << currentWord.next->word << ")->";
+            currentWord = *(currentWord.next);
+            if(empty)
+            {
+                empty = false;
+                break;
+            }
+        }
+        if(!empty)
+        {
+            break;
+        }
+        std::cout << std::endl;
+    }
+    if(empty)
+    {
+        return "";
+    }
+
+    std::cout << length << std::endl;
     std::string output;
     Word * current = randomWord();
     output.append(current->word);
