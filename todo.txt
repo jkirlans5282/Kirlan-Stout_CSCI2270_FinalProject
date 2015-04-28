@@ -1,5 +1,4 @@
 1. Hardcoding
 2. Comments //Need full in-line documentation!
 3. Reamde //Done by Alex, anyone want to read over?
-4. Comment/deletes outputs //Mostly done by Alex, someone should check.
-5. Method/variable names.
+4. Method/variable names.
