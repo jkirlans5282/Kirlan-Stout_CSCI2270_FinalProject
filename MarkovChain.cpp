@@ -17,101 +17,32 @@ bool isNotAlpha(char x)
     return !b;
 }
 
-MarkovChain::MarkovChain(bool v)
+MarkovChain::MarkovChain()
 {
-    isVerbose = v;
-    hashTable->isVerbose = v;
+    isVerbose = false;
+    hashTable->isVerbose = false;
 }
 
-/* If flag is true, textIn is a file name. If false, it's passed as a string. Flag is default TRUE - see MarkovChain.h. */
+MarkovChain::MarkovChain(std::string textIn)
+{
+    isVerbose = false;
+    hashTable->isVerbose = false;
+    add(textIn, false);
+}
+
+MarkovChain::MarkovChain(std::string textIn, bool flag)
+{
+    isVerbose = false;
+    hashTable->isVerbose = false;
+    add(textIn, flag);
+}
+
+/* If flag is true, textIn is a file name. If false, it's passed as a string. */
 MarkovChain::MarkovChain(std::string textIn, bool flag, bool v)
 {
     isVerbose = v;
     hashTable->isVerbose = v;
-    if(!flag) //If a filename is passed and a file needs to be read.
-    {
-        //The first word shouldn't be given an edge to itself, this bool allows it not to.
-        bool firstword = true;
-        std::ifstream inFile(textIn);
-        std::string line;
-        std::string parsedWord;
-        Word *w;
-        //Read in file
-        while(getline(inFile, line))
-        {
-            if(isVerbose)
-            {
-                std::cout << "line: " << std::endl;
-                std::cout << line << std::endl;
-            }
-            std::replace_if(line.begin(), line.end(), isNotAlpha, '\0'); //Replaces all non alphabetical characters with spaces.
-            std::istringstream ss(line);
-            while(std::getline(ss, parsedWord, ' ')) //Parses lines into individual words.
-            {
-                //If word is not a space (resolved issue with seg fault on double spaces)
-                if(parsedWord.compare(""))
-                {
-                    w = addWordToHashtable(parsedWord);
-                    if(!firstword)
-                    {
-                        addEdge(w);
-                    }
-                    else
-                    {
-                        firstword = false;
-                    }
-                    currentWord = w;
-                }
-            }
-        }
-
-        if(isVerbose)
-        {
-            std::cout << "Finished reading in string" << std::endl;
-        }
-    }
-    else
-    {
-        //The first word shouldn't be given an edge to itself, this bool allows it not to.
-        bool firstword = true;
-        std::string line;
-        std::string parsedWord;
-        Word *w;
-        std::istringstream ss1(textIn);
-        int i = 0;
-        //Read in file
-        while(std::getline(ss1, line, '\n'))
-        {
-            if(isVerbose)
-            {
-                std::cout << "Line: " << line << std::endl;
-            }
-            std::replace_if(line.begin(), line.end(), isNotAlpha, '\0'); //Replaces all non alphabetical characters with spaces.
-            std::istringstream ss2(line);
-            while(std::getline(ss2, parsedWord, ' ')) //Parses lines into individual words.
-            {
-                //If word is not a space (resolved issue with seg fault on double spaces)
-                if(parsedWord.compare(""))
-                {
-                    w = addWordToHashtable(parsedWord);
-
-                    if(!firstword)
-                    {
-                        addEdge(w);
-                    }
-                    else
-                    {
-                        firstword = false;
-                    }
-                    currentWord = w;
-                }
-            }
-        }
-        if(isVerbose)
-        {
-            std::cout << "Finished reading in string" << std::endl;
-        }
-    }
+    add(textIn, flag);
 }
 
 void MarkovChain::add(std::string textIn, bool flag)
@@ -120,11 +51,12 @@ void MarkovChain::add(std::string textIn, bool flag)
     {
         //The first word shouldn't be given an edge to itself, this bool allows it not to.
         bool firstword = true;
+        Word *w;
         std::ifstream inFile(textIn);
         std::string line;
         std::string parsedWord;
-        Word *w;
-        //Read in file
+
+        //Reads in the file line by line, and an inner getline() reads the line in word by word.
         while(getline(inFile, line))
         {
             if(isVerbose)
@@ -162,12 +94,13 @@ void MarkovChain::add(std::string textIn, bool flag)
     {
         //The first word shouldn't be given an edge to itself, this bool allows it not to.
         bool firstword = true;
+        Word *w;
         std::string line;
         std::string parsedWord;
-        Word *w;
         std::istringstream ss1(textIn);
         int i = 0;
-        //Read in file
+
+        //Reads in the file line by line, and an inner getline() reads the line in word by word.
         while(std::getline(ss1, line, '\n'))
         {
             if(isVerbose)
@@ -235,6 +168,7 @@ bool MarkovChain::checkForExistingEdge(Word * next){
         return false;
     }
 }
+
 void MarkovChain::addEdge(Word * next) //Untested
 {
     //std::cout<<"Current Word in addEdge is: "<<currentWord<<std::endl; //TEST OUTPUT
@@ -287,20 +221,25 @@ Word * MarkovChain::randomWord()
     std::random_device generator; //This doesn't work on Windows machines.
     std::uniform_int_distribution<int> randomindex (0,hashTableSize-1);
     int random = randomindex(generator);
-    if(isVerbose)
-    {
-        std::cout << "Random index:" << random << std::endl;
-    }
+
     while(hashTable->hashTable[random].next == NULL) //If random (which will be an index in the hash table) is a number with no values assigned to it, re-pick it.
     {
         random = randomindex(generator);
     }
+
+    if(isVerbose)
+    {
+        std::cout << "Random index:" << random << std::endl;
+    }
+
     std::uniform_int_distribution<int> randomdistance (0,hashTable->linkedListLength[random]-1);
     int distance = randomdistance(generator);
+
     if(isVerbose)
     {
         std::cout << "Random distance:" << distance << std::endl;
     }
+
     Word * current = hashTable->hashTable[random].next;
     for(int i = 0; i < distance; i++)
     {
@@ -347,7 +286,8 @@ std::string MarkovChain::generateNextWord()
 void MarkovChain::print(std::string name)
 {
 	Word * found = hashTable->findWord(name, false);
-	found->printWord();
+	if(found != NULL) found->printWord();
+
 }
 
 void MarkovChain::print()

@@ -11,14 +11,19 @@ private:
 	Word *currentWord;
 	Word *addWordToHashtable(std::string name);
 	void addEdge(Word * next);
-	int hashTableSize=10; // Is this variable needed? We have it in the hashTable.h too. -Jacob
+	int hashTableSize=10;
 	Word * nextWord(Word * current);
 	bool checkForExistingEdge(Word *next);
     Word * randomWord();
 public:
-    //Add options to change hashTableSize? -Izaak
-	MarkovChain(bool v = false);
-	MarkovChain(std::string textIn, bool flag = false, bool v = false); //If true, a filename is passed. If false a string of text is passed. (Written untested) -Jacob
+    //For MarkovChain constructors, if v is true, verbose mode is true. See main.cpp for more information on verbose mode.
+    //If flag is false, a filename is passed that needs to be read. If it's true, a string is passed.
+    //The variables set here are OPTIONAL, so v or flag do not have to be passed and will just be set to false by default.
+    //EX: MarkovChain() and MarkovChain("filename.txt") are VALID constructors.
+	MarkovChain();
+	MarkovChain(std::string textIn);
+	MarkovChain(std::string textIn, bool flag);
+	MarkovChain(std::string textIn, bool flag, bool v);
     std::string generateString(int length);
     std::string generateNextWord();
     void print();
