@@ -20,6 +20,7 @@ public:
 	MarkovChain(bool v = false);
 	MarkovChain(std::string textIn, bool flag = false, bool v = false); //If true, a filename is passed. If false a string of text is passed. (Written untested) -Jacob
     std::string generateString(int length);
+    std::string generateNextWord();
     void print();
     void print(std::string);
     void verbose(bool set);

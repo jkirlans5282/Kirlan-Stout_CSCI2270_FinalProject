@@ -9,6 +9,10 @@
 //Determines if a character is alphabetical
 bool isNotAlpha(char x)
 {
+    if(x == ' ')
+    {
+        return false;
+    }
     bool b = isalpha(x);
     return !b;
 }
@@ -40,7 +44,7 @@ MarkovChain::MarkovChain(std::string textIn, bool flag, bool v)
                 std::cout << "line: " << std::endl;
                 std::cout << line << std::endl;
             }
-            std::replace_if(line.begin(), line.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with spaces.
+            std::replace_if(line.begin(), line.end(), isNotAlpha, '\0'); //Replaces all non alphabetical characters with spaces.
             std::istringstream ss(line);
             while(std::getline(ss, parsedWord, ' ')) //Parses lines into individual words.
             {
@@ -82,7 +86,7 @@ MarkovChain::MarkovChain(std::string textIn, bool flag, bool v)
             {
                 std::cout << "Line: " << line << std::endl;
             }
-            std::replace_if(line.begin(), line.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with spaces.
+            std::replace_if(line.begin(), line.end(), isNotAlpha, '\0'); //Replaces all non alphabetical characters with spaces.
             std::istringstream ss2(line);
             while(std::getline(ss2, parsedWord, ' ')) //Parses lines into individual words.
             {
@@ -329,6 +333,14 @@ std::string MarkovChain::generateString(int length)
     {
         std::cout << output << std::endl;
     }
+    currentWord = current;
+    return output;
+}
+
+std::string MarkovChain::generateNextWord()
+{
+    currentWord = nextWord(currentWord);
+    std::string output = currentWord->word;
     return output;
 }
 
