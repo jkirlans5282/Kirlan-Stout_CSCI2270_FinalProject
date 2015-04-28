@@ -16,9 +16,9 @@ bool isNotAlpha(char x)
 /* If flag is true, textIn is a file name. If false, it's passed as a string. Flag is default TRUE - see MarkovChain.h. */
 MarkovChain::MarkovChain(std::string textIn, bool flag, bool v)
 {
-    verbose = v;
-    hashTable->verbose = v;
-    if(flag) //If a filename is passed and a file needs to be read.
+    isVerbose = v;
+    hashTable->isVerbose = v;
+    if(!flag) //If a filename is passed and a file needs to be read.
     {
         //The first word shouldn't be given an edge to itself, this bool allows it not to.
         bool firstword = true;
@@ -27,9 +27,9 @@ MarkovChain::MarkovChain(std::string textIn, bool flag, bool v)
         std::string parsedWord;
         Word *w;
         //Read in file
-        while(getline(inFile, line);)
+        while(getline(inFile, line))
         {
-            if(verbose)
+            if(isVerbose)
             {
                 std::cout << "line: " << std::endl;
                 std::cout << line << std::endl;
@@ -55,7 +55,7 @@ MarkovChain::MarkovChain(std::string textIn, bool flag, bool v)
             }
         }
 
-        if(verbose)
+        if(isVerbose)
         {
             std::cout << "Finished reading in string" << std::endl;
         }
@@ -72,16 +72,14 @@ MarkovChain::MarkovChain(std::string textIn, bool flag, bool v)
         //Read in file
         while(std::getline(ss1, line, '\n'))
         {
-            if(verbose)
+            if(isVerbose)
             {
-                std::cout << "line: " << std::endl;
-                std::cout << line << std::endl;
+                std::cout << "Line: " << line << std::endl;
             }
             std::replace_if(line.begin(), line.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with spaces.
             std::istringstream ss2(line);
             while(std::getline(ss2, parsedWord, ' ')) //Parses lines into individual words.
             {
-                std::cout << parsedWord << std::endl;
                 //If word is not a space (resolved issue with seg fault on double spaces)
                 if(parsedWord.compare(""))
                 {
@@ -98,9 +96,8 @@ MarkovChain::MarkovChain(std::string textIn, bool flag, bool v)
                     currentWord = w;
                 }
             }
-            std::getline(ss1, line);
         }
-        if(verbose)
+        if(isVerbose)
         {
             std::cout << "Finished reading in string" << std::endl;
         }
@@ -191,7 +188,7 @@ Word * MarkovChain::randomWord()
     std::random_device generator; //This doesn't work on Windows machines.
     std::uniform_int_distribution<int> randomindex (0,hashTableSize-1);
     int random = randomindex(generator);
-    if(verbose)
+    if(isVerbose)
     {
         std::cout << "Random index:" << random << std::endl;
     }
@@ -201,7 +198,7 @@ Word * MarkovChain::randomWord()
     }
     std::uniform_int_distribution<int> randomdistance (0,hashTable->linkedListLength[random]-1);
     int distance = randomdistance(generator);
-    if(verbose)
+    if(isVerbose)
     {
         std::cout << "Random distance:" << distance << std::endl;
     }
@@ -223,7 +220,7 @@ std::string MarkovChain::generateString(int length)
     {
         if(current->edges.size() > 0)
         {
-            if(verbose)
+            if(isVerbose)
             {
                 current->printWord();
             }
@@ -233,7 +230,7 @@ std::string MarkovChain::generateString(int length)
         }
     }
     output.append("\b" ".");
-    if(verbose)
+    if(isVerbose)
     {
         std::cout << output << std::endl;
     }
@@ -251,4 +248,8 @@ void MarkovChain::print()
 	hashTable->printInventory();
 }
 
-
+void MarkovChain::verbose(bool set)
+{
+    isVerbose = set;
+    hashTable->isVerbose = set;
+}

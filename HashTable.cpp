@@ -49,7 +49,7 @@ Word *HashTable::insertWord(std::string in_word)
 			}
 		}
 	}
-	if(verbose)
+	if(isVerbose)
     {
         std::cout<<"Word added: " << m->word << std::endl;
     }

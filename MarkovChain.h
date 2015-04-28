@@ -12,15 +12,15 @@ private:
 	Word * nextWord(Word * current);
 	bool checkForExistingEdge(Word *next);
     Word * randomWord();
+    bool isVerbose;
 public:
     //Add options to change hashTableSize? -Izaak
-    bool verbose;
-	MarkovChain(std::string textIn, bool flag = true, bool v = false); //If true, a filename is passed. If false a string of text is passed. (Written untested) -Jacob
+	MarkovChain(std::string textIn, bool flag = false, bool v = false); //If true, a filename is passed. If false a string of text is passed. (Written untested) -Jacob
     std::string generateString(int length);
     HashTable *hashTable = new HashTable(10);
     void print();
     void print(std::string);
-
+    void verbose(bool set);
 };
 
 #endif // MARKOVCHAIN_H
