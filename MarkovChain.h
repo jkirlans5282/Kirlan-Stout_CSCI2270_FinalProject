@@ -5,6 +5,9 @@
 class MarkovChain
 {
 private:
+    HashTable *hashTable = new HashTable(10);
+    bool isVerbose;
+
 	Word *currentWord;
 	Word *addWordToHashtable(std::string name);
 	void addEdge(Word * next);
@@ -12,15 +15,15 @@ private:
 	Word * nextWord(Word * current);
 	bool checkForExistingEdge(Word *next);
     Word * randomWord();
-    bool isVerbose;
 public:
     //Add options to change hashTableSize? -Izaak
+	MarkovChain(bool v = false);
 	MarkovChain(std::string textIn, bool flag = false, bool v = false); //If true, a filename is passed. If false a string of text is passed. (Written untested) -Jacob
     std::string generateString(int length);
-    HashTable *hashTable = new HashTable(10);
     void print();
     void print(std::string);
     void verbose(bool set);
+    void add(std::string textIn, bool flag = false);
 };
 
 #endif // MARKOVCHAIN_H

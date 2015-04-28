@@ -13,6 +13,12 @@ bool isNotAlpha(char x)
     return !b;
 }
 
+MarkovChain::MarkovChain(bool v)
+{
+    isVerbose = v;
+    hashTable->isVerbose = v;
+}
+
 /* If flag is true, textIn is a file name. If false, it's passed as a string. Flag is default TRUE - see MarkovChain.h. */
 MarkovChain::MarkovChain(std::string textIn, bool flag, bool v)
 {
@@ -103,6 +109,95 @@ MarkovChain::MarkovChain(std::string textIn, bool flag, bool v)
         }
     }
 }
+
+void MarkovChain::add(std::string textIn, bool flag)
+{
+    if(!flag) //If a filename is passed and a file needs to be read.
+    {
+        //The first word shouldn't be given an edge to itself, this bool allows it not to.
+        bool firstword = true;
+        std::ifstream inFile(textIn);
+        std::string line;
+        std::string parsedWord;
+        Word *w;
+        //Read in file
+        while(getline(inFile, line))
+        {
+            if(isVerbose)
+            {
+                std::cout << "line: " << std::endl;
+                std::cout << line << std::endl;
+            }
+            std::replace_if(line.begin(), line.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with spaces.
+            std::istringstream ss(line);
+            while(std::getline(ss, parsedWord, ' ')) //Parses lines into individual words.
+            {
+                //If word is not a space (resolved issue with seg fault on double spaces)
+                if(parsedWord.compare(""))
+                {
+                    w = addWordToHashtable(parsedWord);
+                    if(!firstword)
+                    {
+                        addEdge(w);
+                    }
+                    else
+                    {
+                        firstword = false;
+                    }
+                    currentWord = w;
+                }
+            }
+        }
+
+        if(isVerbose)
+        {
+            std::cout << "Finished reading in string" << std::endl;
+        }
+    }
+    else
+    {
+        //The first word shouldn't be given an edge to itself, this bool allows it not to.
+        bool firstword = true;
+        std::string line;
+        std::string parsedWord;
+        Word *w;
+        std::istringstream ss1(textIn);
+        int i = 0;
+        //Read in file
+        while(std::getline(ss1, line, '\n'))
+        {
+            if(isVerbose)
+            {
+                std::cout << "Line: " << line << std::endl;
+            }
+            std::replace_if(line.begin(), line.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with spaces.
+            std::istringstream ss2(line);
+            while(std::getline(ss2, parsedWord, ' ')) //Parses lines into individual words.
+            {
+                //If word is not a space (resolved issue with seg fault on double spaces)
+                if(parsedWord.compare(""))
+                {
+                    w = addWordToHashtable(parsedWord);
+
+                    if(!firstword)
+                    {
+                        addEdge(w);
+                    }
+                    else
+                    {
+                        firstword = false;
+                    }
+                    currentWord = w;
+                }
+            }
+        }
+        if(isVerbose)
+        {
+            std::cout << "Finished reading in string" << std::endl;
+        }
+    }
+}
+
 
 //Adds word to hash table if it isn't already there
 Word * MarkovChain::addWordToHashtable(std::string name)
