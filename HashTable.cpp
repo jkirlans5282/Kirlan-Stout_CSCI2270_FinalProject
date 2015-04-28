@@ -11,6 +11,8 @@ int HashTable::hashSum(std::string str, int s)
 	return abs(hash%arraySize);
 }
 
+//Inserts word into hash table. Pre-conditions: in_word is not "".
+//Post condition: hasTable has one more word in it.
 Word *HashTable::insertWord(std::string in_word)
 {
 	Word *m = new Word(in_word);
@@ -53,7 +55,7 @@ Word *HashTable::insertWord(std::string in_word)
     {
         std::cout<<"Word added: " << m->word << std::endl;
     }
-    
+
     return m; //Now returns the word for later use
 }
 
