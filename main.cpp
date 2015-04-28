@@ -26,8 +26,8 @@ int main()
     //THIS IS COMMENTED OUT BECAUSE IT PRINTS WAY TOO MUCH: MarkovChain example1verbose("hemingway_test.txt", false, true);
     
     MarkovChain example2verbose("one one two one two three one two three four one two three four five one", true, true);
-    
-    MarkovChain example3verbose(true); //This constructor doesn't do anything requiring verbose mode to print stuff
+
+    //An empty markov chain is always initialized to false verbosity.
     
     //You can also change the mode of an object after creation:
     
