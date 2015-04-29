@@ -1,6 +1,6 @@
 #include "MarkovChain.h"
 
-int main()
+/*int main()
 {
     std::string pause;
 
@@ -86,4 +86,22 @@ int main()
     
     
     return 0;
+}*/
+
+
+
+
+int main()
+{
+    MarkovChain wap("test.txt", false, true);
+    wap.generateString(1000);
 }
+
+
+
+
+
+
+
+
+

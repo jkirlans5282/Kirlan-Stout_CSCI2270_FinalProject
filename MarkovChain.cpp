@@ -60,6 +60,26 @@ MarkovChain::MarkovChain(std::string textIn, bool flag, bool v)
     will run, but various strange errors occur.
     Post conditions: Graph (not a class, so no name) and hash table (hashTable) constructed.
 */
+
+bool MarkovChain::addPunctuation(char x)
+{
+    if(x == '.')
+    {
+        period[sentenceLength]++;
+        return true;
+    }
+    else if(x == ',')
+    {
+        comma[sentenceLength]++;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
+}
+
 void MarkovChain::add(std::string textIn, bool flag)
 {
     if(!flag) //textIn is a filename
@@ -78,6 +98,23 @@ void MarkovChain::add(std::string textIn, bool flag)
             {
                 std::cout << "line: " << std::endl;
                 std::cout << line << std::endl;
+            }
+            bool b = false;
+            for(std::string::iterator it = line.begin(); it != line.end(); ++it)
+            {
+                b = addPunctuation(*it);
+                if(b)
+                {
+                    punctuation = true;
+                }
+            }
+            if(punctuation)
+            {
+                sentenceLength = 0;
+            }
+            else
+            {
+                sentenceLength++;
             }
             std::replace_if(line.begin(), line.end(), isNotAlpha, ' '); //Replaces all non alphabetical characters with spaces.
             std::istringstream ss(line);
@@ -298,6 +335,37 @@ Word * MarkovChain::randomWord()
     return current;
 }
 
+std::string MarkovChain::generatePunctuation(std::string output)
+{
+    std::random_device generator;
+    int totalComma, totalPeriod, distanceComma, distancePeriod;
+    for(int i = 0; i < 20; i++)
+    {
+        totalComma += comma[i];
+        totalPeriod += period[i];
+    }
+    for(int i = 0; i < sentenceLength; i++)
+    {
+        distanceComma += comma[i];
+        distancePeriod += period[i];
+    }
+    std::uniform_int_distribution<int> randomdistance (0,totalComma-1);
+    int distance = randomdistance(generator);
+    if(distance < distanceComma)
+    {
+        output.append(",");
+        sentenceLength = 0;
+        return output;
+    }
+    if(distance < distancePeriod)
+    {
+        output.append(".");
+        sentenceLength = 0;
+        return output;
+    }
+    return output;
+}
+
 /*
     GenerateString() makes a string of words, the length of which is passed in as an argument. This is printed to the console.
     It does this by selecting a random word from everything that it has read in.
@@ -310,6 +378,7 @@ Word * MarkovChain::randomWord()
 std::string MarkovChain::generateString(int length)
 {
     bool empty = true;
+    sentenceLength = 0;
     for(int i = 0; i < hashTable->arraySize; i++)
     {
         std::cout << "[" << i << "]" << " : ";
@@ -339,6 +408,7 @@ std::string MarkovChain::generateString(int length)
     std::string output;
     Word * current = randomWord();
     output.append(current->word);
+    output = generatePunctuation(output);
     output.append(" ");
     for(int l = 0; l < length; l++)
     {
@@ -350,6 +420,7 @@ std::string MarkovChain::generateString(int length)
             }
             current = nextWord(current);
             output.append(current->word);
+            output = generatePunctuation(output);
             output.append(" ");
         }
     }

@@ -5,16 +5,22 @@
 class MarkovChain
 {
 private:
-    HashTable *hashTable = new HashTable(10);
+    int hashTableSize=10;
+    HashTable *hashTable = new HashTable(hashTableSize);
     bool isVerbose;
+    bool punctuation;
+    int sentenceLength = 0;
+    Word *currentWord;
+    int period[20] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    int comma[20] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
-	Word *currentWord;
 	Word *addWordToHashtable(std::string name);
 	void addEdge(Word * next);
-	int hashTableSize=10;
+    bool addPunctuation(char);
 	Word * nextWord(Word * current);
 	bool checkForExistingEdge(Word *next);
     Word * randomWord();
+    std::string generatePunctuation(std::string output);
 public:
     /*
         For MarkovChain constructors, if v is true, verbose mode is true. See main.cpp for more information on verbose mode.
