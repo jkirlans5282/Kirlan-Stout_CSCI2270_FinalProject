@@ -62,7 +62,7 @@ Word *HashTable::insertWord(std::string in_word)
 void HashTable::printInventory()
 {
 	bool empty = true;
-	for(int i = 0; i < 10; i++)
+	for(int i = 0; i < arraySize; i++)
     {
 		std::cout << "[" << i << "]" << " : ";
 		Word currentWord = hashTable[i];
