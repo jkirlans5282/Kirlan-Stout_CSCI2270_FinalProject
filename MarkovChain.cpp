@@ -310,7 +310,7 @@ Word * MarkovChain::randomWord()
 std::string MarkovChain::generateString(int length)
 {
     bool empty = true;
-    for(int i = 0; i < hashTable->hashTableSize; i++)
+    for(int i = 0; i < hashTable->arraySize; i++)
     {
         std::cout << "[" << i << "]" << " : ";
         Word currentWord = hashTable->hashTable[i];
