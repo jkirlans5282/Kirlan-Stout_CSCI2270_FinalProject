@@ -9,7 +9,7 @@ int main()
     //PART ONE:
     std::cout << "Part 1:" << std::endl;
 
-    MarkovChain example1("hemingway_test.txt"); //This is the default constructor; it creates a markov chain via a file, the name of which is passed as the first argument.
+    MarkovChain example1("./TestFiles/hemingway_test.txt"); //This is the default constructor; it creates a markov chain via a file, the name of which is passed as the first argument.
     
     MarkovChain example2("one one two one two three one two three four one two three four five one", true); //This constructor constructs a markov chain directly from the string that is passed in, not from a file.
     
@@ -67,7 +67,7 @@ int main()
 
     //To add more text to your markov chain, you can use:
     
-    example1.add("HungerGames.txt");
+    example1.add("./TestFiles/HungerGames.txt");
     
     //or
 
